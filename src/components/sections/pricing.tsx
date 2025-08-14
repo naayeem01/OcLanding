@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Check, Printer, Barcode } from 'lucide-react';
+import { Check, Printer, Barcode, BadgeCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
@@ -71,7 +71,6 @@ const pricingPlans = {
         'স্ট্যান্ডার্ডের সমস্ত বৈশিষ্ট্য',
         'একাধিক-শাখা সমর্থন',
         'উন্নত রিপোর্টিং',
-        'ZKTeco ডিভাইস ইন্টিগ্রেশন',
       ],
       isPopular: false,
       cta: 'প্রফেশনাল বেছে নিন',
@@ -104,7 +103,6 @@ const pricingPlans = {
         'স্ট্যান্ডার্ডের সমস্ত বৈশিষ্ট্য',
         'একাধিক-শাখা সমর্থন',
         'উন্নত রিপোর্টিং',
-        'ZKTeco ডিভাইস ইন্টিগ্রেশন',
       ],
       isPopular: false,
       cta: 'প্রফেশনাল বেছে নিন',
@@ -112,7 +110,7 @@ const pricingPlans = {
   ],
 };
 
-const PricingCard = ({ plan }: { plan: any }) => {
+const PricingCard = ({ plan, isYearly }: { plan: any; isYearly: boolean }) => {
   const [checkedAddons, setCheckedAddons] = useState<Record<string, boolean>>({
     barcodeScanner: false,
     posPrinter: false,
@@ -172,6 +170,12 @@ const PricingCard = ({ plan }: { plan: any }) => {
             </li>
           ))}
         </ul>
+        <div className="mt-4">
+          <Badge variant="secondary" className="font-bangla text-base py-1 px-3">
+              <BadgeCheck className="h-4 w-4 mr-2" />
+              বিনামূল্যে ইনস্টলেশন
+            </Badge>
+        </div>
       </CardContent>
       <CardFooter className="flex flex-col items-start p-6 pt-0">
         <div className="border-t w-full mt-4 pt-4 text-sm text-muted-foreground">
@@ -211,12 +215,14 @@ const PricingCard = ({ plan }: { plan: any }) => {
               {formatPrice(totalPrice)}
             </span>
           </div>
-          <Button
-            className="w-full font-bangla"
-            variant={plan.isPopular ? 'default' : 'outline'}
-          >
-            {plan.cta}
-          </Button>
+          <DemoRequestModal>
+            <Button
+              className="w-full font-bangla"
+              variant={plan.isPopular ? 'default' : 'outline'}
+            >
+              {plan.cta}
+            </Button>
+          </DemoRequestModal>
         </div>
       </CardFooter>
     </Card>
@@ -257,15 +263,14 @@ const PricingSection = () => {
         </div>
         <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-2 justify-center items-stretch">
           {plans.map((plan, index) => (
-            <PricingCard key={index} plan={plan} />
+            <PricingCard
+              key={index}
+              plan={plan}
+              isYearly={billingCycle === 'yearly'}
+            />
           ))}
         </div>
         <div className="text-center mt-12 space-y-4">
-          <DemoRequestModal>
-            <Button size="lg" variant="outline" asChild>
-              <span className="font-bangla text-lg">ডেমোর জন্য অনুরোধ করুন</span>
-            </Button>
-          </DemoRequestModal>
           <p className="text-muted-foreground font-bangla">
             কাস্টম প্ল্যান প্রয়োজন? এন্টারপ্রাইজ সমাধানের জন্য{' '}
             <a
