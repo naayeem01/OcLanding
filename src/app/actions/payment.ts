@@ -1,6 +1,6 @@
 'use server';
 import { z } from 'zod';
-import { submitOrder } from './sms';
+import { processOrder } from './order';
 
 const uddoktaPayApiKey = process.env.UDDOKTAPAY_API_KEY;
 const uddoktaPayBaseUrl = process.env.UDDOKTAPAY_BASE_URL;
@@ -74,11 +74,12 @@ export async function verifyPayment(invoiceId: string) {
         const data = await response.json();
         
         if (response.ok && data.status === 'COMPLETED') {
-             // Payment is successful, send SMS
+             // Payment is successful, send SMS and update Google Sheet
             const metadata = data.metadata;
             const customer = data.customer;
             
-            await submitOrder({
+            await processOrder({
+                orderNumber: data.invoice_id,
                 name: customer.full_name,
                 email: customer.email,
                 phone: metadata.phone,
