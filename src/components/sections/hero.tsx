@@ -31,7 +31,7 @@ const HeroSection = () => {
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <DemoRequestModal>
-              <Button size="lg">
+               <Button size="lg" className="text-lg px-10 py-6 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-shadow">
                 <span className="font-bangla">ডেমোর জন্য অনুরোধ করুন</span>
               </Button>
             </DemoRequestModal>
