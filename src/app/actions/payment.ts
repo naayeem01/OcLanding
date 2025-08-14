@@ -74,7 +74,7 @@ export async function verifyPayment(invoiceId: string) {
         const data = await response.json();
         
         if (response.ok && data.status === 'COMPLETED') {
-             // Payment is successful, send SMS and update Google Sheet
+             // Payment is successful, send SMS and update local file
             const metadata = data.metadata;
             const customer = data.customer;
             
@@ -85,7 +85,7 @@ export async function verifyPayment(invoiceId: string) {
                 phone: metadata.phone,
                 address: metadata.address,
                 planName: metadata.planName,
-                totalPrice: metadata.totalPrice,
+                totalPrice: data.amount,
                 addons: metadata.addons,
                 planPrice: metadata.planPrice,
                 period: metadata.period,

@@ -3,7 +3,8 @@
 
 import request from 'request';
 import { z } from 'zod';
-import { google } from 'googleapis';
+import fs from 'fs/promises';
+import path from 'path';
 
 const OrderDetailsSchema = z.object({
   orderNumber: z.string(),
@@ -19,6 +20,33 @@ const OrderDetailsSchema = z.object({
 });
 
 type OrderDetails = z.infer<typeof OrderDetailsSchema>;
+
+const OrderSchema = z.object({
+  orderNumber: z.string(),
+  name: z.string(),
+  phone: z.string(),
+  date: z.string(),
+  status: z.string(),
+});
+export type Order = z.infer<typeof OrderSchema>;
+
+const ordersFilePath = path.join(process.cwd(), 'data', 'orders.json');
+
+async function getOrdersFromFile(): Promise<Order[]> {
+    try {
+        await fs.access(ordersFilePath);
+        const data = await fs.readFile(ordersFilePath, 'utf-8');
+        return JSON.parse(data);
+    } catch (error) {
+        // If the file doesn't exist, return an empty array
+        return [];
+    }
+}
+
+async function saveOrdersToFile(orders: Order[]) {
+    await fs.writeFile(ordersFilePath, JSON.stringify(orders, null, 2), 'utf-8');
+}
+
 
 async function sendSms(details: OrderDetails) {
   const { name, phone, planName, totalPrice } = details;
@@ -46,40 +74,22 @@ async function sendSms(details: OrderDetails) {
   });
 }
 
-async function appendToSheet(details: OrderDetails) {
+async function appendToLocalFile(details: OrderDetails) {
   try {
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      },
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    });
-
-    const sheets = google.sheets({ version: 'v4', auth });
-    const spreadsheetId = process.env.GOOGLE_SHEET_ID;
-    const range = 'Sheet1!A:E';
-
-    const newRow = [
-      details.orderNumber,
-      details.name,
-      details.phone,
-      new Date().toISOString(),
-      'Completed',
-    ];
-
-    await sheets.spreadsheets.values.append({
-      spreadsheetId,
-      range,
-      valueInputOption: 'USER_ENTERED',
-      requestBody: {
-        values: [newRow],
-      },
-    });
-    console.log('Appended to Google Sheet successfully');
+    const orders = await getOrdersFromFile();
+    const newOrder: Order = {
+      orderNumber: details.orderNumber,
+      name: details.name,
+      phone: details.phone,
+      date: new Date().toISOString(),
+      status: 'Completed',
+    };
+    orders.push(newOrder);
+    await saveOrdersToFile(orders);
+    console.log('Appended to local file successfully');
   } catch (error) {
-    console.error('Error appending to Google Sheet:', error);
-    // We don't re-throw the error to not fail the whole process if sheets fails
+    console.error('Error appending to local file:', error);
+    // We don't re-throw the error to not fail the whole process if the file write fails
   }
 }
 
@@ -94,53 +104,16 @@ export async function processOrder(details: OrderDetails) {
   // Run both in parallel
   await Promise.all([
     sendSms(validatedDetails),
-    appendToSheet(validatedDetails),
+    appendToLocalFile(validatedDetails),
   ]);
 }
 
-
-const OrderSchema = z.object({
-  orderNumber: z.string(),
-  name: z.string(),
-  phone: z.string(),
-  date: z.string(),
-  status: z.string(),
-});
-export type Order = z.infer<typeof OrderSchema>;
-
 export async function getOrders(): Promise<{orders: Order[], error?: string}> {
   try {
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      },
-      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-    });
-
-    const sheets = google.sheets({ version: 'v4', auth });
-    const spreadsheetId = process.env.GOOGLE_SHEET_ID;
-    const range = 'Sheet1!A2:E'; // Assuming row 1 is headers
-
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId,
-      range,
-    });
-
-    const rows = response.data.values;
-    if (rows && rows.length) {
-      const orders = rows.map((row) => ({
-        orderNumber: row[0] || '',
-        name: row[1] || '',
-        phone: row[2] || '',
-        date: row[3] || '',
-        status: row[4] || '',
-      })).filter(order => order.orderNumber); // Filter out empty rows
-      return { orders: orders.reverse() }; // Show most recent first
-    }
-    return { orders: [] };
+    const orders = await getOrdersFromFile();
+    return { orders: orders.reverse() }; // Show most recent first
   } catch (error) {
-    console.error('Error fetching from Google Sheet:', error);
-    return { orders: [], error: 'Failed to fetch orders from Google Sheet.' };
+    console.error('Error fetching from local file:', error);
+    return { orders: [], error: 'Failed to fetch orders.' };
   }
 }
