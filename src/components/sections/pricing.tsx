@@ -37,7 +37,7 @@ const hardwareAddons = [
   {
     id: 'posPrinter',
     name: 'পস প্রিন্টার',
-    price: 0, // Not addable to price, but checkable
+    price: 3999,
     icon: <Printer className="h-4 w-4 mr-2 text-primary" />,
   },
 ];
@@ -45,29 +45,18 @@ const hardwareAddons = [
 const pricingPlans = {
   monthly: [
     {
-      name: 'বিনামূল্যে ট্রায়াল',
-      price: '৳০',
-      period: '১৪ দিনের জন্য',
-      description: 'কোনো প্রতিশ্রুতি ছাড়াই সমস্ত বৈশিষ্ট্য অন্বেষণ করুন।',
-      features: [
-        'সম্পূর্ণ পিওএস এবং বিলিং অ্যাক্সেস',
-        'ইনভেন্টরি ম্যানেজমেন্ট',
-        'বিক্রয় বিশ্লেষণ',
-        '২৪/৭ সাপোর্ট',
-      ],
-      isPopular: false,
-      cta: 'বিনামূল্যে ট্রায়াল শুরু করুন',
-    },
-    {
       name: 'স্ট্যান্ডার্ড',
       price: '৳১,৫০০',
       period: '/মাস',
       description: 'একক-শাখা ফার্মেসির জন্য উপযুক্ত।',
       features: [
-        'বিনামূল্যে ট্রায়ালের সমস্ত বৈশিষ্ট্য',
+        'সম্পূর্ণ পিওএস এবং বিলিং অ্যাক্সেস',
+        'ইনভেন্টরি ম্যানেজমেন্ট',
+        'বিক্রয় বিশ্লেষণ',
         'একাধিক-ব্যবহারকারী অ্যাক্সেস',
         'ওষুধের মেয়াদ উত্তীর্ণের সতর্কতা',
         'ক্লাউড ব্যাকআপ',
+        '২৪/৭ সাপোর্ট',
       ],
       isPopular: true,
       cta: 'স্ট্যান্ডার্ড বেছে নিন',
@@ -89,29 +78,18 @@ const pricingPlans = {
   ],
   yearly: [
     {
-      name: 'বিনামূল্যে ট্রায়াল',
-      price: '৳০',
-      period: '১৪ দিনের জন্য',
-      description: 'কোনো প্রতিশ্রুতি ছাড়াই সমস্ত বৈশিষ্ট্য অন্বেষণ করুন।',
-      features: [
-        'সম্পূর্ণ পিওএস এবং বিলিং অ্যাক্সেস',
-        'ইনভেন্টরি ম্যানেজমেন্ট',
-        'বিক্রয় বিশ্লেষণ',
-        '২৪/৭ সাপোর্ট',
-      ],
-      isPopular: false,
-      cta: 'বিনামূল্যে ট্রায়াল শুরু করুন',
-    },
-    {
       name: 'স্ট্যান্ডার্ড',
       price: '৳১৫,০০০',
       period: '/বছর',
       description: 'একক-শাখা ফার্মেসির জন্য উপযুক্ত।',
       features: [
-        'বিনামূল্যে ট্রায়ালের সমস্ত বৈশিষ্ট্য',
+        'সম্পূর্ণ পিওএস এবং বিলিং অ্যাক্সেস',
+        'ইনভেন্টরি ম্যানেজমেন্ট',
+        'বিক্রয় বিশ্লেষণ',
         'একাধিক-ব্যবহারকারী অ্যাক্সেস',
         'ওষুধের মেয়াদ উত্তীর্ণের সতর্কতা',
         'ক্লাউড ব্যাকআপ',
+        '২৪/৭ সাপোর্ট',
       ],
       isPopular: true,
       cta: 'স্ট্যান্ডার্ড বেছে নিন',
@@ -217,7 +195,7 @@ const PricingCard = ({ plan, billingCycle }: { plan: any; billingCycle: 'monthly
                   />
                   <Label
                     htmlFor={`${plan.name}-${addon.id}`}
-                    className="flex items-center cursor-pointer text-sm"
+                    className="flex items-center cursor-pointer text-sm w-full"
                   >
                     {addon.icon}
                     <span>{addon.name}</span>
@@ -279,13 +257,18 @@ const PricingSection = () => {
           />
           <Label htmlFor="billing-cycle" className="font-bangla text-lg">বার্ষিক (২ মাস ছাড়!)</Label>
         </div>
-        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3 justify-center items-stretch">
+        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-2 justify-center items-stretch">
           {plans.map((plan, index) => (
              <PricingCard key={index} plan={plan} billingCycle={billingCycle} />
           ))}
         </div>
-        <div className="text-center mt-12 text-muted-foreground font-bangla">
-            <p>কাস্টম প্ল্যান প্রয়োজন? এন্টারপ্রাইজ সমাধানের জন্য <a href="mailto:contact@oushodcloud.com" className="text-primary hover:underline font-medium">আমাদের সাথে যোগাযোগ করুন</a>।</p>
+        <div className="text-center mt-12 space-y-4">
+            <Button size="lg" variant="outline">
+                <span className="font-bangla text-lg">ডেমোর জন্য অনুরোধ করুন</span>
+            </Button>
+            <p className="text-muted-foreground font-bangla">
+            কাস্টম প্ল্যান প্রয়োজন? এন্টারপ্রাইজ সমাধানের জন্য <a href="mailto:contact@oushodcloud.com" className="text-primary hover:underline font-medium">আমাদের সাথে যোগাযোগ করুন</a>।
+            </p>
         </div>
       </div>
     </section>
