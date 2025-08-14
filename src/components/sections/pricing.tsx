@@ -16,7 +16,6 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import DemoRequestModal from './demo-request-modal';
 import Link from 'next/link';
 
 const parsePrice = (priceString: string | number): number => {
@@ -26,7 +25,7 @@ const parsePrice = (priceString: string | number): number => {
 };
 
 const formatPrice = (price: number): string => {
-  return `৳${price.toLocaleString('en-IN')}`;
+  return `${price.toLocaleString('en-IN')}`;
 };
 
 const hardwareAddons = [
@@ -50,7 +49,7 @@ const pricingPlans = {
       name: 'স্ট্যান্ডার্ড',
       originalPrice: 1500,
       price: 750,
-      period: '/মাস',
+      period: 'মাসিক',
       description: 'একক-শাখা ফার্মেসির জন্য উপযুক্ত।',
       features: [
         'সম্পূর্ণ পিওএস এবং বিলিং অ্যাক্সেস',
@@ -68,7 +67,7 @@ const pricingPlans = {
       name: 'প্রফেশনাল',
       originalPrice: 2500,
       price: 1250,
-      period: '/মাস',
+      period: 'মাসিক',
       description: 'একাধিক-শাখা পরিচালনা এবং ক্রমবর্ধমান ব্যবসার জন্য আদর্শ।',
       features: [
         'স্ট্যান্ডার্ডের সমস্ত বৈশিষ্ট্য',
@@ -84,7 +83,7 @@ const pricingPlans = {
       name: 'স্ট্যান্ডার্ড',
       originalPrice: 15000,
       price: 7500,
-      period: '/বছর',
+      period: 'বার্ষিক',
       description: 'একক-শাখা ফার্মেসির জন্য উপযুক্ত।',
       features: [
         'সম্পূর্ণ পিওএস এবং বিলিং অ্যাক্সেস',
@@ -102,7 +101,7 @@ const pricingPlans = {
       name: 'প্রফেশনাল',
       originalPrice: 25000,
       price: 12500,
-      period: '/বছর',
+      period: 'বার্ষিক',
       description: 'একাধিক-শাখা পরিচালনা এবং ক্রমবর্ধমান ব্যবসার জন্য আদর্শ।',
       features: [
         'স্ট্যান্ডার্ডের সমস্ত বৈশিষ্ট্য',
@@ -133,10 +132,14 @@ const PricingCard = ({ plan }: { plan: any }) => {
     }, 0);
     return basePrice + addonsPrice;
   }, [basePrice, checkedAddons]);
-
+  
   const handleAddonCheck = (addonId: string) => {
     setCheckedAddons((prev) => ({ ...prev, [addonId]: !prev[addonId] }));
   };
+
+  const selectedAddons = useMemo(() => {
+    return Object.keys(checkedAddons).filter(addonId => checkedAddons[addonId]);
+  }, [checkedAddons]);
 
   return (
     <Card
@@ -159,13 +162,13 @@ const PricingCard = ({ plan }: { plan: any }) => {
         </CardDescription>
         <div className="flex items-baseline gap-2 mt-4">
           <span className="text-4xl font-extrabold tracking-tight">
-            {formatPrice(plan.price)}
+           ৳{formatPrice(plan.price)}
           </span>
           <span className="text-xl font-medium text-muted-foreground line-through">
-            {formatPrice(plan.originalPrice)}
+           ৳{formatPrice(plan.originalPrice)}
           </span>
           <span className="text-sm font-medium text-muted-foreground font-bangla">
-            {plan.period}
+            /{plan.period}
           </span>
         </div>
       </CardHeader>
@@ -206,7 +209,7 @@ const PricingCard = ({ plan }: { plan: any }) => {
                   <span>{addon.name}</span>
                   {addon.price > 0 && (
                     <span className="ml-auto font-semibold text-primary">
-                      + {formatPrice(addon.price)}
+                      + ৳{formatPrice(addon.price)}
                     </span>
                   )}
                 </Label>
@@ -220,17 +223,18 @@ const PricingCard = ({ plan }: { plan: any }) => {
               সর্বমোট মূল্য:{' '}
             </span>
             <span className="text-2xl font-bold text-primary">
-              {formatPrice(totalPrice)}
+             ৳{formatPrice(totalPrice)}
             </span>
           </div>
-          <DemoRequestModal>
-            <Button
-              className="w-full font-bangla"
-              variant={plan.isPopular ? 'default' : 'outline'}
-            >
+          <Button
+            className="w-full font-bangla"
+            variant={plan.isPopular ? 'default' : 'outline'}
+            asChild
+          >
+            <Link href={`/checkout?plan=${encodeURIComponent(plan.name)}&totalPrice=${totalPrice}&addons=${selectedAddons.join(',')}&planPrice=${plan.price}&period=${plan.period}`}>
               {plan.cta}
-            </Button>
-          </DemoRequestModal>
+            </Link>
+          </Button>
         </div>
       </CardFooter>
     </Card>
