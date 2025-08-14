@@ -1,6 +1,8 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
+import DemoRequestModal from './demo-request-modal';
 
 const HeroSection = () => {
   return (
@@ -28,9 +30,11 @@ const HeroSection = () => {
             ঔষধক্লাউড আপনার ফার্মেসির কার্যক্রম সহজ করার জন্য শক্তিশালী, সহজে ব্যবহারযোগ্য সফ্টওয়্যার সরবরাহ করে, যা পিওএস বিলিং থেকে ইনভেন্টরি ম্যানেজমেন্ট পর্যন্ত সবকিছু সহজ করে।
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" asChild>
-              <Link href="#pricing" className="font-bangla">বিনামূল্যে ট্রায়াল শুরু করুন</Link>
-            </Button>
+            <DemoRequestModal>
+              <Button size="lg">
+                <span className="font-bangla">ডেমোর জন্য অনুরোধ করুন</span>
+              </Button>
+            </DemoRequestModal>
             <Button size="lg" variant="outline" asChild>
               <Link href="#features" className="font-bangla">আরও জানুন</Link>
             </Button>
