@@ -81,8 +81,8 @@ const Footer = () => {
               যোগাযোগ
             </h3>
             <ul className="space-y-2 text-sm text-muted-foreground font-bangla">
-              <li>ইমেল: contact@oushodcloud.com</li>
-              <li>ফোন: +৮৮০ ১২৩৪ ৫৬৭৮৯০</li>
+              <li>ইমেল: oushodcloud@gmail.com</li>
+              <li>ফোন: +8801577001441</li>
             </ul>
             <div className="flex space-x-4 mt-4">
               <Button variant="ghost" size="icon" asChild>
