@@ -1,3 +1,4 @@
+
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import React from 'react';
@@ -11,7 +12,7 @@ const AboutSection = () => {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="relative">
             <Image
-              src="https://oushodcloud.com/public/uploads/25/07/1752994474-987.png"
+              src="https://oushodcloud.com/public/uploads/25/07/1752994953-316.png"
               alt="OushodCloud Dashboard"
               width={1200}
               height={900}
