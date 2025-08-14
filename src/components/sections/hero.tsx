@@ -7,7 +7,7 @@ const HeroSection = () => {
     <section className="relative bg-card pt-20 pb-10 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-24">
       <div className="absolute inset-0 overflow-hidden">
         <Image
-          src="https://placehold.co/1920x1080.png"
+          src="https://oushodcloud.com/public/uploads/25/07/1752993401-402.png"
           alt="Illustration of pharmacy POS and cloud software"
           data-ai-hint="pharmacy software illustration"
           layout="fill"
