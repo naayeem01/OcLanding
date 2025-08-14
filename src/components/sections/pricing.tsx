@@ -1,3 +1,4 @@
+
 'use client';
 import React, { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
@@ -170,9 +171,9 @@ const PricingCard = ({ plan }: { plan: any }) => {
           ))}
         </ul>
         <div className="mt-4">
-          <Badge variant="secondary" className="font-bangla text-base py-1 px-3">
+          <Badge variant="destructive" className="font-bangla text-base py-1 px-3">
             <BadgeCheck className="h-4 w-4 mr-2" />
-            বিনামূল্যে ইনস্টলেশন
+            ফ্রী ইনস্টলেশন
           </Badge>
         </div>
       </CardContent>
