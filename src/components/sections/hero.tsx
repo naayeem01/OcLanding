@@ -4,10 +4,16 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import DemoRequestModal from './demo-request-modal';
+import { cn } from '@/lib/utils';
 
 const HeroSection = () => {
   return (
-    <section className="relative bg-card pt-20 pb-10 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-24">
+    <section
+      className={cn(
+        'relative bg-card pt-20 pb-10 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-24',
+        'medical-pattern'
+      )}
+    >
       <div className="absolute inset-0 overflow-hidden">
         <Image
           src="https://oushodcloud.com/public/uploads/25/07/1752993401-402.png"
@@ -15,7 +21,7 @@ const HeroSection = () => {
           data-ai-hint="pharmacy software illustration"
           layout="fill"
           objectFit="cover"
-          className="opacity-10"
+          className="opacity-5"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-card via-card to-transparent"></div>
       </div>
@@ -28,16 +34,24 @@ const HeroSection = () => {
             </span>
           </h1>
           <p className="mt-6 text-lg text-muted-foreground sm:text-xl font-bangla">
-            <span className="font-bold text-primary">ঔষধক্লাউড</span> আপনার ফার্মেসির কার্যক্রম সহজ করার জন্য শক্তিশালী, সহজে ব্যবহারযোগ্য সফ্টওয়্যার সরবরাহ করে, যা পিওএস বিলিং থেকে ইনভেন্টরি ম্যানেজমেন্ট পর্যন্ত সবকিছু সহজ করে।
+            <span className="font-bold text-primary">ঔষধক্লাউড</span> আপনার
+            ফার্মেসির কার্যক্রম সহজ করার জন্য শক্তিশালী, সহজে ব্যবহারযোগ্য
+            সফ্টওয়্যার সরবরাহ করে, যা পিওএস বিলিং থেকে ইনভেন্টরি ম্যানেজমেন্ট
+            পর্যন্ত সবকিছু সহজ করে।
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <DemoRequestModal>
-               <Button size="lg" className="text-lg px-10 py-6 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-shadow">
+              <Button
+                size="lg"
+                className="text-lg px-10 py-6 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-shadow"
+              >
                 <span className="font-bangla">ডেমোর জন্য আবেদন করুন</span>
               </Button>
             </DemoRequestModal>
             <Button size="lg" variant="outline" asChild>
-              <Link href="#features" className="font-bangla">আরও জানুন</Link>
+              <Link href="#features" className="font-bangla">
+                আরও জানুন
+              </Link>
             </Button>
           </div>
         </div>

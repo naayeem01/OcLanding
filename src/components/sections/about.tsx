@@ -1,8 +1,12 @@
+import { cn } from '@/lib/utils';
 import React from 'react';
 
 const AboutSection = () => {
   return (
-    <section id="about" className="py-16 sm:py-24 bg-card">
+    <section
+      id="about"
+      className={cn('py-16 sm:py-24 bg-card', 'medical-pattern')}
+    >
       <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl font-bangla">
           <span className="text-primary">ঔষধক্লাউড</span> সম্পর্কে

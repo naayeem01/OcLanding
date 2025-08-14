@@ -8,6 +8,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { cn } from '@/lib/utils';
 
 const testimonials = [
   {
@@ -50,7 +51,10 @@ const testimonials = [
 
 const TestimonialsSection = () => {
   return (
-    <section id="testimonials" className="py-16 sm:py-24 bg-card">
+    <section
+      id="testimonials"
+      className={cn('py-16 sm:py-24 bg-card', 'medical-pattern')}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl font-bangla">
@@ -73,22 +77,33 @@ const TestimonialsSection = () => {
                 <div className="p-1">
                   <Card className="h-full flex flex-col">
                     <CardContent className="p-6 flex-1 flex flex-col justify-between">
-                      <blockquote className="text-lg text-foreground italic border-l-4 border-primary pl-4 font-bangla">
-                        "
-                        {testimonial.quote.replace(
-                          /ঔষধক্লাউড/g,
-                          '<span class="font-bold text-primary">ঔষধক্লাউড</span>'
-                        )}
-                        "
-                      </blockquote>
+                      <blockquote
+                        className="text-lg text-foreground italic border-l-4 border-primary pl-4 font-bangla"
+                        dangerouslySetInnerHTML={{
+                          __html: `"${testimonial.quote.replace(
+                            /ঔষধক্লাউড/g,
+                            '<span class="font-bold text-primary">ঔষধক্লাউড</span>'
+                          )}"`,
+                        }}
+                      />
                       <div className="mt-6 flex items-center">
                         <Avatar>
-                          <AvatarImage src={testimonial.image} alt={testimonial.name} data-ai-hint={testimonial.dataAiHint} />
-                          <AvatarFallback>{testimonial.avatar}</AvatarFallback>
+                          <AvatarImage
+                            src={testimonial.image}
+                            alt={testimonial.name}
+                            data-ai-hint={testimonial.dataAiHint}
+                          />
+                          <AvatarFallback>
+                            {testimonial.avatar}
+                          </AvatarFallback>
                         </Avatar>
                         <div className="ml-4">
-                          <p className="font-semibold text-foreground font-bangla">{testimonial.name}</p>
-                          <p className="text-sm text-muted-foreground font-bangla">{testimonial.pharmacy}</p>
+                          <p className="font-semibold text-foreground font-bangla">
+                            {testimonial.name}
+                          </p>
+                          <p className="text-sm text-muted-foreground font-bangla">
+                            {testimonial.pharmacy}
+                          </p>
                         </div>
                       </div>
                     </CardContent>
