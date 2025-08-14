@@ -23,16 +23,16 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-foreground mb-4">
-              Quick Links
+            <h3 className="text-lg font-semibold text-foreground mb-4 font-bangla">
+              গুরুত্বপূর্ণ লিংক
             </h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-sm font-bangla">
               <li>
                 <Link
                   href="#features"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Features
+                  বৈশিষ্ট্য
                 </Link>
               </li>
               <li>
@@ -40,7 +40,7 @@ const Footer = () => {
                   href="#pricing"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Pricing
+                  মূল্য তালিকা
                 </Link>
               </li>
               <li>
@@ -48,23 +48,23 @@ const Footer = () => {
                   href="#testimonials"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Testimonials
+                  প্রশংসাপত্র
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-foreground mb-4">
-              Legal
+            <h3 className="text-lg font-semibold text-foreground mb-4 font-bangla">
+              আইনি
             </h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-sm font-bangla">
               <li>
                 <Link
                   href="/privacy-policy"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Privacy Policy
+                  গোপনীয়তা নীতি
                 </Link>
               </li>
               <li>
@@ -72,19 +72,19 @@ const Footer = () => {
                   href="/terms-of-service"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Terms & Conditions
+                  শর্তাবলী
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-foreground mb-4">
-              Contact Us
+            <h3 className="text-lg font-semibold text-foreground mb-4 font-bangla">
+              যোগাযোগ
             </h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>Email: contact@oushodcloud.com</li>
-              <li>Phone: +880 1234 567890</li>
+            <ul className="space-y-2 text-sm text-muted-foreground font-bangla">
+              <li>ইমেল: contact@oushodcloud.com</li>
+              <li>ফোন: +৮৮০ ১২৩৪ ৫৬৭৮৯০</li>
             </ul>
             <div className="flex space-x-4 mt-4">
               <Button variant="ghost" size="icon" asChild>
@@ -119,8 +119,8 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-          <p>
-            &copy; {new Date().getFullYear()} OushodCloud. All rights reserved.
+          <p className="font-bangla">
+            &copy; {new Date().getFullYear()} ঔষধক্লাউড। সর্বস্বত্ব সংরক্ষিত।
           </p>
         </div>
       </div>

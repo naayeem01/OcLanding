@@ -5,23 +5,23 @@ import { Gauge, Target, ShieldCheck, Cloud } from 'lucide-react';
 const benefits = [
   {
     icon: <Gauge className="h-10 w-10 text-primary" />,
-    title: 'Unmatched Speed',
-    description: 'Our optimized POS system ensures swift billing and operations, reducing customer wait times.',
+    title: 'অতুলনীয় গতি',
+    description: 'আমাদের অপ্টিমাইজ করা পিওএস সিস্টেম দ্রুত বিলিং এবং অপারেশন নিশ্চিত করে, গ্রাহকের অপেক্ষার সময় কমিয়ে দেয়।',
   },
   {
     icon: <Target className="h-10 w-10 text-primary" />,
-    title: 'Guaranteed Accuracy',
-    description: 'Minimize errors in inventory and sales with our precise tracking and reporting tools.',
+    title: 'নির্ভুলতার গ্যারান্টি',
+    description: 'আমাদের সুনির্দিষ্ট ট্র্যাকিং এবং রিপোর্টিং সরঞ্জামগুলির মাধ্যমে ইনভেন্টরি এবং বিক্রয়ে ভুল হ্রাস করুন।',
   },
   {
     icon: <ShieldCheck className="h-10 w-10 text-primary" />,
-    title: 'Data Security',
-    description: 'We use industry-standard encryption to keep your pharmacy and customer data safe.',
+    title: 'তথ্যের নিরাপত্তা',
+    description: 'আপনার ফার্মেসি এবং গ্রাহকের ডেটা সুরক্ষিত রাখতে আমরা ইন্ডাস্ট্রি-স্ট্যান্ডার্ড এনক্রিপশন ব্যবহার করি।',
   },
   {
     icon: <Cloud className="h-10 w-10 text-primary" />,
-    title: 'Reliable Cloud Backup',
-    description: 'Never worry about data loss. Your information is securely backed up in the cloud, accessible anytime.',
+    title: 'নির্ভরযোগ্য ক্লাউড ব্যাকআপ',
+    description: 'ডেটা হারানোর বিষয়ে আর চিন্তা নেই। আপনার তথ্য ক্লাউডে সুরক্ষিতভাবে ব্যাক আপ করা হয়, যেকোনো সময় অ্যাক্সেসযোগ্য।',
   },
 ];
 
@@ -30,11 +30,11 @@ const WhyChooseUsSection = () => {
     <section id="why-us" className="py-16 sm:py-24 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Why Choose OushodCloud?
+          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl font-bangla">
+            কেন ঔষধক্লাউড বেছে নেবেন?
           </h2>
-          <p className="mt-4 text-xl text-muted-foreground">
-            We provide a solution that is not just a software, but a partner in your pharmacy's growth.
+          <p className="mt-4 text-xl text-muted-foreground font-bangla">
+            আমরা এমন একটি সমাধান প্রদান করি যা কেবল একটি সফ্টওয়্যার নয়, আপনার ফার্মেসির বৃদ্ধিতে একজন অংশীদার।
           </p>
         </div>
         <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -43,8 +43,8 @@ const WhyChooseUsSection = () => {
               <div className="flex items-center justify-center h-20 w-20 rounded-full bg-primary/10 mx-auto mb-6">
                 {benefit.icon}
               </div>
-              <h3 className="text-xl font-bold text-foreground">{benefit.title}</h3>
-              <p className="mt-2 text-base text-muted-foreground">{benefit.description}</p>
+              <h3 className="text-xl font-bold text-foreground font-bangla">{benefit.title}</h3>
+              <p className="mt-2 text-base text-muted-foreground font-bangla">{benefit.description}</p>
             </div>
           ))}
         </div>

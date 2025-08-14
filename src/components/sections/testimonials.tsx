@@ -11,40 +11,40 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const testimonials = [
   {
-    name: 'Abdullah Al Mamun',
-    pharmacy: 'Mamun Pharmacy, Dhaka',
-    avatar: 'AM',
+    name: 'আবদুল্লাহ আল মামুন',
+    pharmacy: 'মামুন ফার্মেসি, ঢাকা',
+    avatar: 'আ',
     image: 'https://placehold.co/100x100.png',
     dataAiHint: 'man portrait',
     quote:
-      'OushodCloud has revolutionized how I manage my inventory. The expiry alerts feature alone has saved me thousands. It\'s simple, fast, and incredibly reliable.',
+      'ঔষধক্লাউড আমার ইনভেন্টরি ব্যবস্থাপনায় বিপ্লব এনেছে। মেয়াদ উত্তীর্ণের সতর্কীকরণ ফিচারটি একাই আমার হাজার হাজার টাকা বাঁচিয়েছে। এটি সহজ, দ্রুত এবং অবিশ্বাস্যভাবে নির্ভরযোগ্য।',
   },
   {
-    name: 'Fatima Akhter',
-    pharmacy: 'Shifa Medical Hall, Chittagong',
-    avatar: 'FA',
+    name: 'ফাতিমা আক্তার',
+    pharmacy: 'শিফা মেডিকেল হল, চট্টগ্রাম',
+    avatar: 'ফা',
     image: 'https://placehold.co/100x100.png',
     dataAiHint: 'woman portrait',
     quote:
-      'The POS system is so intuitive. My staff learned it in a day. Billing is faster than ever, and customers are happier. I highly recommend it to every pharmacy owner.',
+      'পিওএস সিস্টেমটি খুবই সহজ। আমার কর্মীরা একদিনেই এটি শিখে নিয়েছে। বিলিং আগের চেয়ে দ্রুত হয়েছে, এবং গ্রাহকরাও খুশি। আমি প্রত্যেক ফার্মেসি মালিককে এটি ব্যবহারের সুপারিশ করছি।',
   },
   {
-    name: 'Rahim Sheikh',
-    pharmacy: 'Niramoy Drug House, Sylhet',
-    avatar: 'RS',
+    name: 'রহিম শেখ',
+    pharmacy: 'নিরাময় ড্রাগ হাউস, সিলেট',
+    avatar: 'র',
     image: 'https://placehold.co/100x100.png',
     dataAiHint: 'man smiling',
     quote:
-      'Being able to check sales reports from anywhere on my phone is a game-changer. The cloud backup gives me peace of mind. Excellent software and support!',
+      'আমার ফোনের মাধ্যমে যেকোনো জায়গা থেকে বিক্রয় প্রতিবেদন দেখতে পারাটা একটা গেম-চেঞ্জার। ক্লাউড ব্যাকআপ আমাকে মানসিক শান্তি দেয়। চমৎকার সফ্টওয়্যার এবং সাপোর্ট!',
   },
-    {
-    name: 'Sadia Islam',
-    pharmacy: 'Central Pharmacy, Rajshahi',
-    avatar: 'SI',
+  {
+    name: 'সাদিয়া ইসলাম',
+    pharmacy: 'সেন্ট্রাল ফার্মেসি, রাজশাহী',
+    avatar: 'সা',
     image: 'https://placehold.co/100x100.png',
     dataAiHint: 'woman professional',
     quote:
-      'Managing multiple branches was a nightmare before OushodCloud. Now, I can see the stock and sales of all my stores from one dashboard. It has simplified my business.',
+      'ঔষধক্লাউড ব্যবহারের আগে একাধিক শাখা পরিচালনা করাটা একটা দুঃস্বপ্নের মতো ছিল। এখন আমি এক ড্যাশবোর্ড থেকেই আমার সব দোকানের স্টক এবং বিক্রয় দেখতে পারি। এটি আমার ব্যবসাকে সহজ করে দিয়েছে।',
   },
 ];
 
@@ -53,8 +53,8 @@ const TestimonialsSection = () => {
     <section id="testimonials" className="py-16 sm:py-24 bg-card">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Trusted by Pharmacies Across Bangladesh
+          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl font-bangla">
+            সারাদেশের ফার্মেসির বিশ্বস্ত
           </h2>
           <p className="mt-4 text-xl text-muted-foreground font-bangla">
             আমাদের ব্যবহারকারীরা কী বলছেন শুনুন
@@ -73,7 +73,7 @@ const TestimonialsSection = () => {
                 <div className="p-1">
                   <Card className="h-full flex flex-col">
                     <CardContent className="p-6 flex-1 flex flex-col justify-between">
-                      <blockquote className="text-lg text-foreground italic border-l-4 border-primary pl-4">
+                      <blockquote className="text-lg text-foreground italic border-l-4 border-primary pl-4 font-bangla">
                         "{testimonial.quote}"
                       </blockquote>
                       <div className="mt-6 flex items-center">
@@ -82,8 +82,8 @@ const TestimonialsSection = () => {
                           <AvatarFallback>{testimonial.avatar}</AvatarFallback>
                         </Avatar>
                         <div className="ml-4">
-                          <p className="font-semibold text-foreground">{testimonial.name}</p>
-                          <p className="text-sm text-muted-foreground">{testimonial.pharmacy}</p>
+                          <p className="font-semibold text-foreground font-bangla">{testimonial.name}</p>
+                          <p className="text-sm text-muted-foreground font-bangla">{testimonial.pharmacy}</p>
                         </div>
                       </div>
                     </CardContent>

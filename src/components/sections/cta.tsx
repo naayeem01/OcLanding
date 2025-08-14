@@ -6,8 +6,8 @@ const CtaSection = () => {
   return (
     <section id="cta" className="bg-background py-20 sm:py-28">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-          Start Today, Simplify Your Pharmacy
+        <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl font-bangla">
+          আজই শুরু করুন, আপনার ফার্মেসিকে সহজ করুন
         </h2>
         <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground font-bangla">
           আর অপেক্ষা কেন? আজই আপনার ফার্মেসিকে আধুনিক করে তুলুন ঔষধক্লাউড এর সাথে।
@@ -15,7 +15,7 @@ const CtaSection = () => {
         </p>
         <div className="mt-10">
           <Button size="lg" asChild>
-            <Link href="#pricing">Get Started for Free</Link>
+            <Link href="#pricing" className="font-bangla">বিনামূল্যে শুরু করুন</Link>
           </Button>
         </div>
       </div>

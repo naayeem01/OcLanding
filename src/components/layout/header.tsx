@@ -16,10 +16,10 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navLinks = [
-    { href: '#features', label: 'Features' },
-    { href: '#why-us', label: 'Why Us' },
-    { href: '#testimonials', label: 'Testimonials' },
-    { href: '#pricing', label: 'Pricing' },
+    { href: '#features', label: 'বৈশিষ্ট্য' },
+    { href: '#why-us', label: 'কেন আমরা' },
+    { href: '#testimonials', label: 'প্রশংসাপত্র' },
+    { href: '#pricing', label: 'মূল্য তালিকা' },
   ];
 
   return (
@@ -35,7 +35,7 @@ const Header = () => {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary font-bangla"
             >
               {link.label}
             </Link>
@@ -44,10 +44,10 @@ const Header = () => {
 
         <div className="hidden md:flex items-center gap-4">
           <Button variant="outline" asChild>
-            <Link href="#">Login</Link>
+            <Link href="#" className="font-bangla">লগইন</Link>
           </Button>
           <Button asChild>
-            <Link href="#pricing">Start Free Trial</Link>
+            <Link href="#pricing" className="font-bangla">বিনামূল্যে ট্রায়াল শুরু করুন</Link>
           </Button>
         </div>
 
@@ -77,7 +77,7 @@ const Header = () => {
                     <SheetClose asChild key={link.href}>
                       <Link
                         href={link.href}
-                        className="text-lg font-medium text-foreground transition-colors hover:text-primary"
+                        className="text-lg font-medium text-foreground transition-colors hover:text-primary font-bangla"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         {link.label}
@@ -87,10 +87,10 @@ const Header = () => {
                 </nav>
                 <div className="mt-auto p-4 border-t space-y-4">
                   <Button variant="outline" className="w-full" asChild>
-                    <Link href="#" onClick={() => setIsMenuOpen(false)}>Login</Link>
+                    <Link href="#" onClick={() => setIsMenuOpen(false)} className="font-bangla">লগইন</Link>
                   </Button>
                   <Button className="w-full" asChild>
-                    <Link href="#pricing" onClick={() => setIsMenuOpen(false)}>Start Free Trial</Link>
+                    <Link href="#pricing" onClick={() => setIsMenuOpen(false)} className="font-bangla">বিনামূল্যে ট্রায়াল শুরু করুন</Link>
                   </Button>
                 </div>
               </div>

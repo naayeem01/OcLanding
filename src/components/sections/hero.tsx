@@ -18,22 +18,21 @@ const HeroSection = () => {
       </div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-            The Modern Way to Manage Your Pharmacy
-            <span className="block text-primary font-bangla mt-2">
+          <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl font-bangla">
+            আপনার ফার্মেসি পরিচালনার আধুনিক উপায়
+            <span className="block text-primary mt-2">
               আপনার ফার্মেসি এখন আপনার হাতের মুঠোয়
             </span>
           </h1>
-          <p className="mt-6 text-lg text-muted-foreground sm:text-xl">
-            OushodCloud provides powerful, easy-to-use software to streamline
-            your pharmacy operations, from POS billing to inventory management.
+          <p className="mt-6 text-lg text-muted-foreground sm:text-xl font-bangla">
+            ঔষধক্লাউড আপনার ফার্মেসির কার্যক্রম সহজ করার জন্য শক্তিশালী, সহজে ব্যবহারযোগ্য সফ্টওয়্যার সরবরাহ করে, যা পিওএস বিলিং থেকে ইনভেন্টরি ম্যানেজমেন্ট পর্যন্ত সবকিছু সহজ করে।
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" asChild>
-              <Link href="#pricing">Start Free Trial</Link>
+              <Link href="#pricing" className="font-bangla">বিনামূল্যে ট্রায়াল শুরু করুন</Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="#features">Learn More</Link>
+              <Link href="#features" className="font-bangla">আরও জানুন</Link>
             </Button>
           </div>
         </div>
