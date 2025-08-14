@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -15,8 +15,8 @@ import { updateVideoSectionConfig, VideoSectionConfig } from '@/app/actions/site
 import { useRouter } from 'next/navigation';
 
 const FormSchema = z.object({
-  isEnabled: z.boolean(),
-  videoUrl: z.string().url('অনুগ্রহ করে একটি সঠিক ইউটিউব এমবেড URL লিখুন।').or(z.literal('')),
+  isEnabled: z.boolean().default(false),
+  videoUrl: z.string().url({ message: 'অনুগ্রহ করে একটি সঠিক ইউটিউব এমবেড URL লিখুন।' }).or(z.literal('')),
 });
 
 type FormValues = z.infer<typeof FormSchema>;
@@ -39,7 +39,7 @@ export default function VideoSettings({ initialConfig }: { initialConfig: VideoS
       const result = await updateVideoSectionConfig(data);
       if (result.success) {
         toast({ title: 'সেটিংস আপডেট হয়েছে', description: 'ভিডিও বিভাগের সেটিংস সফলভাবে সেভ করা হয়েছে।' });
-        router.refresh(); // Refresh the page to reflect changes
+        router.refresh();
       } else {
         toast({ variant: 'destructive', title: 'ত্রুটি', description: result.error });
       }
