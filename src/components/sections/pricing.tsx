@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Check, Printer, Barcode, BadgeCheck } from 'lucide-react';
+import { Check, Printer, Barcode, BadgeCheck, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
@@ -52,7 +52,7 @@ const pricingPlans = {
       period: 'দৈনিক',
       description: '১ দিনের জন্য টেস্টিং প্যাকেজ।',
       features: [
-        'সম্পূর্ণ পিওএস এবং বিলিং অ্যাক্সেস',
+        'সম্পূর্ণ POS এবং বিলিং অ্যাক্সেস',
         'ইনভেন্টরি ম্যানেজমেন্ট',
         'বিক্রয় বিশ্লেষণ',
       ],
@@ -66,7 +66,7 @@ const pricingPlans = {
       period: 'মাসিক',
       description: 'একক-শাখা ফার্মেসির জন্য উপযুক্ত।',
       features: [
-        'সম্পূর্ণ পিওএস এবং বিলিং অ্যাক্সেস',
+        'সম্পূর্ণ POS এবং বিলিং অ্যাক্সেস',
         'ইনভেন্টরি ম্যানেজমেন্ট',
         'বিক্রয় বিশ্লেষণ',
         'একাধিক-ব্যবহারকারী অ্যাক্সেস',
@@ -100,7 +100,7 @@ const pricingPlans = {
       period: 'বার্ষিক',
       description: 'একক-শাখা ফার্মেসির জন্য উপযুক্ত।',
       features: [
-        'সম্পূর্ণ পিওএস এবং বিলিং অ্যাক্সেস',
+        'সম্পূর্ণ POS এবং বিলিং অ্যাক্সেস',
         'ইনভেন্টরি ম্যানেজমেন্ট',
         'বিক্রয় বিশ্লেষণ',
         'একাধিক-ব্যবহারকারী অ্যাক্সেস',
@@ -121,9 +121,11 @@ const pricingPlans = {
         'স্ট্যান্ডার্ডের সমস্ত বৈশিষ্ট্য',
         'একাধিক-শাখা সমর্থন',
         'উন্নত রিপোর্টিং',
+        'ফ্রি পস ডিভাইস',
       ],
       isPopular: false,
       cta: 'প্রফেশনাল বেছে নিন',
+      hasFreeInstallation: true,
     },
   ],
 };
@@ -197,7 +199,7 @@ const PricingCard = ({ plan }: { plan: any }) => {
             </li>
           ))}
         </ul>
-        {plan.name !== 'ট্রায়াল' && (
+        {plan.hasFreeInstallation && (
           <div className="mt-4">
             <Badge variant="destructive" className="font-bangla text-base py-1 px-3">
               <BadgeCheck className="h-4 w-4 mr-2" />
