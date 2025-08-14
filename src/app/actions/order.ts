@@ -1,3 +1,4 @@
+
 'use server';
 
 import request from 'request';
@@ -95,4 +96,51 @@ export async function processOrder(details: OrderDetails) {
     sendSms(validatedDetails),
     appendToSheet(validatedDetails),
   ]);
+}
+
+
+const OrderSchema = z.object({
+  orderNumber: z.string(),
+  name: z.string(),
+  phone: z.string(),
+  date: z.string(),
+  status: z.string(),
+});
+export type Order = z.infer<typeof OrderSchema>;
+
+export async function getOrders(): Promise<{orders: Order[], error?: string}> {
+  try {
+    const auth = new google.auth.GoogleAuth({
+      credentials: {
+        client_email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+        private_key: process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      },
+      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+    });
+
+    const sheets = google.sheets({ version: 'v4', auth });
+    const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+    const range = 'Sheet1!A2:E'; // Assuming row 1 is headers
+
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range,
+    });
+
+    const rows = response.data.values;
+    if (rows && rows.length) {
+      const orders = rows.map((row) => ({
+        orderNumber: row[0] || '',
+        name: row[1] || '',
+        phone: row[2] || '',
+        date: row[3] || '',
+        status: row[4] || '',
+      })).filter(order => order.orderNumber); // Filter out empty rows
+      return { orders: orders.reverse() }; // Show most recent first
+    }
+    return { orders: [] };
+  } catch (error) {
+    console.error('Error fetching from Google Sheet:', error);
+    return { orders: [], error: 'Failed to fetch orders from Google Sheet.' };
+  }
 }
