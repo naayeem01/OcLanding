@@ -15,12 +15,12 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import Link from 'next/link';
 
 const parsePrice = (priceString: string): number => {
-  if (priceString.startsWith('৳')) {
-    return parseInt(priceString.replace(/[৳,]/g, ''), 10);
-  }
-  return 0;
+  if (typeof priceString === 'number') return priceString;
+  const price = parseInt(priceString.replace(/[^\d]/g, ''), 10);
+  return isNaN(price) ? 0 : price;
 };
 
 const formatPrice = (price: number): string => {
@@ -111,7 +111,7 @@ const pricingPlans = {
   ],
 };
 
-const PricingCard = ({ plan, billingCycle }: { plan: any; billingCycle: 'monthly' | 'yearly' }) => {
+const PricingCard = ({ plan }: { plan: any; }) => {
   const [checkedAddons, setCheckedAddons] = useState<Record<string, boolean>>({
     barcodeScanner: false,
     posPrinter: false,
@@ -148,13 +148,6 @@ const PricingCard = ({ plan, billingCycle }: { plan: any; billingCycle: 'monthly
           সবচেয়ে জনপ্রিয়
         </Badge>
       )}
-      {billingCycle === 'yearly' && !isTrial && (
-        <div className="absolute top-2 right-2 rotate-12">
-          <span className="inline-block bg-red-500 text-white text-xs font-bold font-bangla px-3 py-1 rounded-full uppercase shadow-md">
-            ফ্রি ইনস্টলেশন
-          </span>
-        </div>
-      )}
       <CardHeader className="p-6">
         <CardTitle className="text-2xl font-bold font-bangla">{plan.name}</CardTitle>
         <CardDescription className="text-base text-muted-foreground font-bangla h-12">
@@ -180,46 +173,42 @@ const PricingCard = ({ plan, billingCycle }: { plan: any; billingCycle: 'monthly
         </ul>
       </CardContent>
       <CardFooter className="flex flex-col items-start p-6 pt-0">
-        {!isTrial && (
-          <div className="border-t w-full mt-4 pt-4 text-sm text-muted-foreground">
-            <p className="font-bangla font-semibold mb-2 text-foreground">
-              হার্ডওয়্যার অ্যাড-অনস:
-            </p>
-            <ul className="space-y-3 font-bangla">
-              {hardwareAddons.map((addon) => (
-                <li key={addon.id} className="flex items-center">
-                  <Checkbox
-                    id={`${plan.name}-${addon.id}`}
-                    onCheckedChange={() => handleAddonCheck(addon.id)}
-                    className="mr-3"
-                  />
-                  <Label
-                    htmlFor={`${plan.name}-${addon.id}`}
-                    className="flex items-center cursor-pointer text-sm w-full"
-                  >
-                    {addon.icon}
-                    <span>{addon.name}</span>
-                    {addon.price > 0 && (
-                      <span className="ml-auto font-semibold text-primary">
-                        + {formatPrice(addon.price)}
-                      </span>
-                    )}
-                  </Label>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <div className="border-t w-full mt-4 pt-4 text-sm text-muted-foreground">
+          <p className="font-bangla font-semibold mb-2 text-foreground">
+            হার্ডওয়্যার অ্যাড-অনস:
+          </p>
+          <ul className="space-y-3 font-bangla">
+            {hardwareAddons.map((addon) => (
+              <li key={addon.id} className="flex items-center">
+                <Checkbox
+                  id={`${plan.name}-${addon.id}`}
+                  onCheckedChange={() => handleAddonCheck(addon.id)}
+                  className="mr-3"
+                />
+                <Label
+                  htmlFor={`${plan.name}-${addon.id}`}
+                  className="flex items-center cursor-pointer text-sm w-full"
+                >
+                  {addon.icon}
+                  <span>{addon.name}</span>
+                  {addon.price > 0 && (
+                    <span className="ml-auto font-semibold text-primary">
+                      + {formatPrice(addon.price)}
+                    </span>
+                  )}
+                </Label>
+              </li>
+            ))}
+          </ul>
+        </div>
         <div className="w-full mt-6">
-           {!isTrial && (
-             <div className="text-center mb-4 p-2 rounded-lg bg-muted">
-               <span className="font-bangla font-semibold text-foreground">সর্বমোট মূল্য: </span>
-               <span className="text-2xl font-bold text-primary">{formatPrice(totalPrice)}</span>
-               <span className="text-sm font-medium text-muted-foreground font-bangla">
-                  {billingCycle === 'monthly' ? '/মাস' : '/বছর'}
-                </span>
-             </div>
-           )}
+           <div className="text-center mb-4 p-2 rounded-lg bg-muted">
+             <span className="font-bangla font-semibold text-foreground">সর্বমোট মূল্য: </span>
+             <span className="text-2xl font-bold text-primary">{formatPrice(totalPrice)}</span>
+             <span className="text-sm font-medium text-muted-foreground font-bangla">
+                {plan.period}
+              </span>
+           </div>
           <Button
             className="w-full font-bangla"
             variant={plan.isPopular ? 'default' : 'outline'}
@@ -259,12 +248,12 @@ const PricingSection = () => {
         </div>
         <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-2 justify-center items-stretch">
           {plans.map((plan, index) => (
-             <PricingCard key={index} plan={plan} billingCycle={billingCycle} />
+             <PricingCard key={index} plan={plan} />
           ))}
         </div>
         <div className="text-center mt-12 space-y-4">
-            <Button size="lg" variant="outline">
-                <span className="font-bangla text-lg">ডেমোর জন্য অনুরোধ করুন</span>
+            <Button size="lg" variant="outline" asChild>
+                <Link href="#" className="font-bangla text-lg">ডেমোর জন্য অনুরোধ করুন</Link>
             </Button>
             <p className="text-muted-foreground font-bangla">
             কাস্টম প্ল্যান প্রয়োজন? এন্টারপ্রাইজ সমাধানের জন্য <a href="mailto:contact@oushodcloud.com" className="text-primary hover:underline font-medium">আমাদের সাথে যোগাযোগ করুন</a>।
