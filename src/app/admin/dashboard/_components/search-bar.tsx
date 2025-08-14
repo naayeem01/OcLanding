@@ -68,8 +68,12 @@ export default function SearchBar() {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all" className='font-bangla'>সকল স্ট্যাটাস</SelectItem>
-          <SelectItem value="Completed" className='font-bangla'>সম্পন্ন</SelectItem>
-          <SelectItem value="Pending" className='font-bangla'>বিচারাধীন</SelectItem>
+          <SelectItem value="Pending" className='font-bangla'>বিচারাধীন (Pending)</SelectItem>
+          <SelectItem value="Processing" className='font-bangla'>প্রসেসিং (Processing)</SelectItem>
+          <SelectItem value="On Hold" className='font-bangla'>হোল্ডে (On Hold)</SelectItem>
+          <SelectItem value="Confirmed" className='font-bangla'>নিশ্চিত (Confirmed)</SelectItem>
+          <SelectItem value="Device On The Way" className='font-bangla'>ডিভাইস পথে (Device On The Way)</SelectItem>
+          <SelectItem value="Device Delivered" className='font-bangla'>ডিভাইস বিতরণ (Device Delivered)</SelectItem>
         </SelectContent>
       </Select>
 

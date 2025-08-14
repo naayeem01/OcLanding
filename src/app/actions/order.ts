@@ -27,13 +27,23 @@ const ManualOrderDetailsSchema = OrderDetailsSchema.extend({
 });
 type ManualOrderDetails = z.infer<typeof ManualOrderDetailsSchema>;
 
+const OrderStatusSchema = z.enum([
+    'Pending',
+    'Processing',
+    'On Hold',
+    'Confirmed',
+    'Device On The Way',
+    'Device Delivered',
+]);
+export type OrderStatus = z.infer<typeof OrderStatusSchema>;
+
 
 const OrderSchema = z.object({
   orderNumber: z.string(),
   name: z.string(),
   phone: z.string(),
   date: z.string(),
-  status: z.string(), // 'Completed', 'Pending'
+  status: OrderStatusSchema, 
   paymentMethod: z.string().optional(),
   transactionId: z.string().optional(),
   totalPrice: z.string().optional(),
@@ -58,10 +68,7 @@ async function saveOrdersToFile(orders: Order[]) {
 }
 
 
-async function sendSms(details: OrderDetails) {
-  const { name, phone, planName, totalPrice } = details;
-  const message = `Thanks for your order, ${name}! Your order for OushodCloud ${planName} plan is confirmed. Total amount: BDT ${totalPrice}.`;
-
+async function sendSms(phone: string, message: string) {
   const options = {
     method: 'POST',
     url: 'https://api.sms.net.bd/sendsms',
@@ -84,7 +91,39 @@ async function sendSms(details: OrderDetails) {
   });
 }
 
-async function appendToLocalFile(details: OrderDetails) {
+async function sendWelcomeSms(details: OrderDetails) {
+  const { name, phone, planName, totalPrice } = details;
+  const message = `Thanks for your order, ${name}! Your order for OushodCloud ${planName} plan is confirmed. Total amount: BDT ${totalPrice}.`;
+  await sendSms(phone, message);
+}
+
+async function sendStatusUpdateSms(phone: string, orderNumber: string, status: OrderStatus) {
+    let message = '';
+    switch (status) {
+        case 'Processing':
+            message = `Your OushodCloud order #${orderNumber} is now being processed. We will notify you once it's confirmed.`;
+            break;
+        case 'On Hold':
+            message = `Your OushodCloud order #${orderNumber} is currently on hold. We will contact you shortly with more details.`;
+            break;
+        case 'Confirmed':
+            message = `Great news! Your OushodCloud order #${orderNumber} has been confirmed.`;
+            break;
+        case 'Device On The Way':
+            message = `Your hardware for OushodCloud order #${orderNumber} is on its way to you!`;
+            break;
+        case 'Device Delivered':
+             message = `Your hardware for OushodCloud order #${orderNumber} has been delivered. Welcome to OushodCloud!`;
+            break;
+        default:
+            // No message for 'Pending' or other statuses
+            return;
+    }
+    await sendSms(phone, message);
+}
+
+
+async function appendToLocalFile(details: OrderDetails, status: OrderStatus) {
   try {
     const orders = await getOrdersFromFile();
     const newOrder: Order = {
@@ -92,7 +131,7 @@ async function appendToLocalFile(details: OrderDetails) {
       name: details.name,
       phone: details.phone,
       date: new Date().toISOString(),
-      status: 'Completed',
+      status: status,
       totalPrice: details.totalPrice,
     };
     orders.push(newOrder);
@@ -114,8 +153,8 @@ export async function processOrder(details: OrderDetails) {
 
   // Run both in parallel
   await Promise.all([
-    sendSms(validatedDetails),
-    appendToLocalFile(validatedDetails),
+    sendWelcomeSms(validatedDetails),
+    appendToLocalFile(validatedDetails, 'Confirmed'),
   ]);
 }
 
@@ -151,7 +190,12 @@ export async function getOrders(): Promise<{orders: Order[], error?: string}> {
   }
 }
 
-export async function updateOrderStatus(orderNumber: string, status: 'Completed' | 'Pending'): Promise<{success: boolean, error?: string}> {
+export async function updateOrderStatus(orderNumber: string, status: OrderStatus): Promise<{success: boolean, error?: string}> {
+    const validation = OrderStatusSchema.safeParse(status);
+    if (!validation.success) {
+        return { success: false, error: 'Invalid status provided' };
+    }
+
     try {
         const orders = await getOrdersFromFile();
         const orderIndex = orders.findIndex(o => o.orderNumber === orderNumber);
@@ -159,9 +203,13 @@ export async function updateOrderStatus(orderNumber: string, status: 'Completed'
         if (orderIndex === -1) {
             return { success: false, error: 'Order not found' };
         }
-
-        orders[orderIndex].status = status;
+        
+        const order = orders[orderIndex];
+        order.status = status;
+        
         await saveOrdersToFile(orders);
+        await sendStatusUpdateSms(order.phone, order.orderNumber, status);
+
         return { success: true };
     } catch (error) {
         console.error('Error updating order status:', error);

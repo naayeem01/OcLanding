@@ -12,7 +12,17 @@ import {
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import SearchBar from './_components/search-bar';
-import UpdateStatusButton from './_components/update-status-button';
+import UpdateStatusControl from './_components/update-status-button';
+
+const statusColors: { [key: string]: string } = {
+    'Pending': 'bg-yellow-100 text-yellow-800',
+    'Processing': 'bg-blue-100 text-blue-800',
+    'On Hold': 'bg-orange-100 text-orange-800',
+    'Confirmed': 'bg-green-100 text-green-800',
+    'Device On The Way': 'bg-purple-100 text-purple-800',
+    'Device Delivered': 'bg-teal-100 text-teal-800',
+};
+
 
 export default async function AdminDashboard({
   searchParams,
@@ -97,14 +107,13 @@ export default async function AdminDashboard({
                       <TableCell>{new Date(order.date).toLocaleDateString('bn-BD')}</TableCell>
                       <TableCell>
                           <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                              order.status === 'Completed' ? 'bg-green-100 text-green-800' : 
-                              order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
+                              statusColors[order.status] || 'bg-gray-100 text-gray-800'
                           }`}>
                               {order.status}
                           </span>
                       </TableCell>
                        <TableCell>
-                           <UpdateStatusButton orderNumber={order.orderNumber} currentStatus={order.status} />
+                           <UpdateStatusControl orderNumber={order.orderNumber} currentStatus={order.status} />
                        </TableCell>
                     </TableRow>
                   ))
