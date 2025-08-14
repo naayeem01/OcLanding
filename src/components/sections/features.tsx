@@ -1,3 +1,4 @@
+
 import {
   BarChart2,
   Boxes,
@@ -20,7 +21,7 @@ const features = [
   {
     icon: <Receipt className="h-8 w-8 text-primary" />,
     title: 'দ্রুত POS বিলিং',
-    description: 'পিওএস, বিলিং এবং বিক্রয়ের রেকর্ড বাংলা ও ইংরেজিতে সহজেই পরিচালনা করুন।',
+    description: 'POS, বিলিং এবং বিক্রয়ের রেকর্ড বাংলা ও ইংরেজিতে সহজেই পরিচালনা করুন।',
   },
   {
     icon: <Boxes className="h-8 w-8 text-primary" />,
