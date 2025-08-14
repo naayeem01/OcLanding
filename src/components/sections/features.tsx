@@ -7,7 +7,6 @@ import {
   ListTodo,
   Receipt,
   ShoppingCart,
-  Store,
   Users,
   Package,
   FileText,
@@ -37,11 +36,6 @@ const features = [
     icon: <CalendarClock className="h-8 w-8 text-primary" />,
     title: 'মেয়াদ উত্তীর্ণের অ্যালার্ট',
     description: 'মেয়াদোত্তীর্ণ ওষুধের জন্য স্বয়ংক্রিয় সতর্কতা পেয়ে অপচয় কমান।',
-  },
-  {
-    icon: <Store className="h-8 w-8 text-primary" />,
-    title: 'মাল্টি-ব্রাঞ্চ সাপোর্ট',
-    description: 'একটি একক, কেন্দ্রীভূত প্ল্যাটফর্ম থেকে একাধিক ফার্মাসি শাখা পরিচালনা করুন।',
   },
   {
     icon: <Users className="h-8 w-8 text-primary" />,
