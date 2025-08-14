@@ -13,7 +13,8 @@ import {
   FileText,
   BookOpen,
   TrendingUp,
-  ClipboardList
+  ClipboardList,
+  Smartphone
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
@@ -62,6 +63,11 @@ const features = [
     icon: <TrendingUp className="h-8 w-8 text-primary" />,
     title: 'লাভ/লোকসান বিশ্লেষণ',
     description: 'বিক্রয় বনাম ব্যয় বিশ্লেষণ করুন এবং লাভ/লোকসান প্রতিবেদন তৈরি করুন।',
+  },
+    {
+    icon: <Smartphone className="h-8 w-8 text-primary" />,
+    title: 'মোবাইল অ্যাপ',
+    description: 'আমাদের মোবাইল অ্যাপের মাধ্যমে যেকোনো জায়গা থেকে আপনার ফার্মেসি পরিচালনা করুন।',
   },
   {
     icon: <Languages className="h-8 w-8 text-primary" />,

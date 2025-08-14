@@ -1,12 +1,12 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Gauge, Target, ShieldCheck, Cloud } from 'lucide-react';
+import { Gauge, Target, ShieldCheck, Cloud, Smartphone } from 'lucide-react';
 
 const benefits = [
   {
     icon: <Gauge className="h-10 w-10 text-primary" />,
     title: 'অতুলনীয় গতি',
-    description: 'আমাদের অপ্টিমাইজ করা পিওএস সিস্টেম দ্রুত বিলিং এবং অপারেশন নিশ্চিত করে, গ্রাহকের অপেক্ষার সময় কমিয়ে দেয়।',
+    description: 'আমাদের অপ্টিমাইজ করা POS সিস্টেম দ্রুত বিলিং এবং অপারেশন নিশ্চিত করে, গ্রাহকের অপেক্ষার সময় কমিয়ে দেয়।',
   },
   {
     icon: <Target className="h-10 w-10 text-primary" />,
@@ -19,9 +19,9 @@ const benefits = [
     description: 'আপনার ফার্মেসি এবং গ্রাহকের ডেটা সুরক্ষিত রাখতে আমরা ইন্ডাস্ট্রি-স্ট্যান্ডার্ড এনক্রিপশন ব্যবহার করি।',
   },
   {
-    icon: <Cloud className="h-10 w-10 text-primary" />,
-    title: 'নির্ভরযোগ্য ক্লাউড ব্যাকআপ',
-    description: 'ডেটা হারানোর বিষয়ে আর চিন্তা নেই। আপনার তথ্য ক্লাউডে সুরক্ষিতভাবে ব্যাক আপ করা হয়, যেকোনো সময় অ্যাক্সেসযোগ্য।',
+    icon: <Smartphone className="h-10 w-10 text-primary" />,
+    title: 'মোবাইল অ্যাক্সেস',
+    description: 'আমাদের মোবাইল অ্যাপের মাধ্যমে যেকোনো সময়, যেকোনো জায়গা থেকে আপনার ফার্মেসি পরিচালনা করুন।',
   },
 ];
 
