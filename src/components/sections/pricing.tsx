@@ -1,6 +1,6 @@
 
 'use client';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -130,9 +130,11 @@ const pricingPlans = {
 };
 
 const PricingCard = ({ plan }: { plan: any }) => {
+  const isYearlyProfessional = plan.name === 'প্রফেশনাল' && plan.period === 'বার্ষিক';
+
   const [checkedAddons, setCheckedAddons] = useState<Record<string, boolean>>({
     barcodeScanner: false,
-    posPrinter: false,
+    posPrinter: isYearlyProfessional,
   });
 
   const basePrice = useMemo(() => parsePrice(plan.price), [plan.price]);
@@ -141,12 +143,16 @@ const PricingCard = ({ plan }: { plan: any }) => {
     const addonsPrice = Object.keys(checkedAddons).reduce((total, addonId) => {
       if (checkedAddons[addonId]) {
         const addon = hardwareAddons.find((a) => a.id === addonId);
+        // Don't add price for free printer on yearly pro plan
+        if (addonId === 'posPrinter' && isYearlyProfessional) {
+            return total;
+        }
         return total + (addon?.price || 0);
       }
       return total;
     }, 0);
     return basePrice + addonsPrice;
-  }, [basePrice, checkedAddons]);
+  }, [basePrice, checkedAddons, isYearlyProfessional]);
   
   const handleAddonCheck = (addonId: string) => {
     setCheckedAddons((prev) => ({ ...prev, [addonId]: !prev[addonId] }));
@@ -155,6 +161,13 @@ const PricingCard = ({ plan }: { plan: any }) => {
   const selectedAddons = useMemo(() => {
     return Object.keys(checkedAddons).filter(addonId => checkedAddons[addonId]);
   }, [checkedAddons]);
+  
+  useEffect(() => {
+      // Ensure the printer is always checked for the yearly professional plan
+      if (isYearlyProfessional) {
+          setCheckedAddons(prev => ({...prev, posPrinter: true}));
+      }
+  }, [isYearlyProfessional]);
 
   return (
     <Card
@@ -214,27 +227,38 @@ const PricingCard = ({ plan }: { plan: any }) => {
               হার্ডওয়্যার অ্যাড-অনস:
             </p>
             <ul className="space-y-3 font-bangla">
-              {hardwareAddons.map((addon) => (
-                <li key={addon.id} className="flex items-center">
-                  <Checkbox
-                    id={`${plan.name}-${addon.id}`}
-                    onCheckedChange={() => handleAddonCheck(addon.id)}
-                    className="mr-3"
-                  />
-                  <Label
-                    htmlFor={`${plan.name}-${addon.id}`}
-                    className="flex items-center cursor-pointer text-sm w-full"
-                  >
-                    {addon.icon}
-                    <span>{addon.name}</span>
-                    {addon.price > 0 && (
-                      <span className="ml-auto font-semibold text-primary">
-                        + ৳{formatPrice(addon.price)}
-                      </span>
-                    )}
-                  </Label>
-                </li>
-              ))}
+              {hardwareAddons.map((addon) => {
+                 const isFreePrinter = addon.id === 'posPrinter' && isYearlyProfessional;
+                 return (
+                    <li key={addon.id} className="flex items-center">
+                    <Checkbox
+                        id={`${plan.name}-${addon.id}`}
+                        checked={checkedAddons[addon.id]}
+                        onCheckedChange={() => handleAddonCheck(addon.id)}
+                        disabled={isFreePrinter}
+                        className="mr-3"
+                    />
+                    <Label
+                        htmlFor={`${plan.name}-${addon.id}`}
+                        className={cn("flex items-center text-sm w-full", isFreePrinter ? "cursor-default" : "cursor-pointer")}
+                    >
+                        {addon.icon}
+                        <span>{addon.name}</span>
+                         {isFreePrinter ? (
+                            <span className="ml-auto font-semibold text-green-600">
+                               ফ্রি
+                            </span>
+                        ) : (
+                           addon.price > 0 && (
+                            <span className="ml-auto font-semibold text-primary">
+                                + ৳{formatPrice(addon.price)}
+                            </span>
+                           )
+                        )}
+                    </Label>
+                    </li>
+                )
+              })}
             </ul>
           </div>
          )}
