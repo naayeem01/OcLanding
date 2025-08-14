@@ -16,6 +16,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
+import DemoRequestModal from './demo-request-modal';
 
 const parsePrice = (priceString: string | number): number => {
   if (typeof priceString === 'number') return priceString;
@@ -260,11 +261,11 @@ const PricingSection = () => {
           ))}
         </div>
         <div className="text-center mt-12 space-y-4">
-          <Button size="lg" variant="outline" asChild>
-            <Link href="#" className="font-bangla text-lg">
-              ডেমোর জন্য অনুরোধ করুন
-            </Link>
-          </Button>
+          <DemoRequestModal>
+            <Button size="lg" variant="outline" asChild>
+              <span className="font-bangla text-lg">ডেমোর জন্য অনুরোধ করুন</span>
+            </Button>
+          </DemoRequestModal>
           <p className="text-muted-foreground font-bangla">
             কাস্টম প্ল্যান প্রয়োজন? এন্টারপ্রাইজ সমাধানের জন্য{' '}
             <a

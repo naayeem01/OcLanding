@@ -11,6 +11,7 @@ import {
   SheetClose,
 } from '@/components/ui/sheet';
 import OushodCloudLogo from '../icons/oushod-cloud-logo';
+import DemoRequestModal from '../sections/demo-request-modal';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -45,9 +46,11 @@ const Header = () => {
           <Button variant="outline" asChild>
             <Link href="#" className="font-bangla">লগইন</Link>
           </Button>
-          <Button asChild>
-            <Link href="#pricing" className="font-bangla">ডেমোর জন্য অনুরোধ করুন</Link>
-          </Button>
+          <DemoRequestModal>
+            <Button asChild>
+              <span className="font-bangla">ডেমোর জন্য অনুরোধ করুন</span>
+            </Button>
+          </DemoRequestModal>
         </div>
 
         <div className="md:hidden">
@@ -88,9 +91,11 @@ const Header = () => {
                   <Button variant="outline" className="w-full" asChild>
                     <Link href="#" onClick={() => setIsMenuOpen(false)} className="font-bangla">লগইন</Link>
                   </Button>
-                  <Button className="w-full" asChild>
-                    <Link href="#pricing" onClick={() => setIsMenuOpen(false)} className="font-bangla">ডেমোর জন্য অনুরোধ করুন</Link>
-                  </Button>
+                  <DemoRequestModal>
+                    <Button className="w-full" asChild>
+                      <span className="font-bangla">ডেমোর জন্য অনুরোধ করুন</span>
+                    </Button>
+                  </DemoRequestModal>
                 </div>
               </div>
             </SheetContent>
