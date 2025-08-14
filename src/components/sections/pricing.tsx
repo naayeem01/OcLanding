@@ -46,6 +46,20 @@ const hardwareAddons = [
 const pricingPlans = {
   monthly: [
     {
+      name: 'ট্রায়াল',
+      originalPrice: 10,
+      price: 10,
+      period: 'দৈনিক',
+      description: '১ দিনের জন্য টেস্টিং প্যাকেজ।',
+      features: [
+        'সম্পূর্ণ পিওএস এবং বিলিং অ্যাক্সেস',
+        'ইনভেন্টরি ম্যানেজমেন্ট',
+        'বিক্রয় বিশ্লেষণ',
+      ],
+      isPopular: false,
+      cta: 'ট্রায়াল শুরু করুন',
+    },
+    {
       name: 'স্ট্যান্ডার্ড',
       originalPrice: 1500,
       price: 750,
@@ -164,9 +178,11 @@ const PricingCard = ({ plan }: { plan: any }) => {
           <span className="text-4xl font-extrabold tracking-tight">
            ৳{formatPrice(plan.price)}
           </span>
-          <span className="text-xl font-medium text-muted-foreground line-through">
-           ৳{formatPrice(plan.originalPrice)}
-          </span>
+          { plan.originalPrice > plan.price && 
+            <span className="text-xl font-medium text-muted-foreground line-through">
+              ৳{formatPrice(plan.originalPrice)}
+            </span>
+          }
           <span className="text-sm font-medium text-muted-foreground font-bangla">
             /{plan.period}
           </span>
@@ -181,42 +197,46 @@ const PricingCard = ({ plan }: { plan: any }) => {
             </li>
           ))}
         </ul>
-        <div className="mt-4">
-          <Badge variant="destructive" className="font-bangla text-base py-1 px-3">
-            <BadgeCheck className="h-4 w-4 mr-2" />
-            ফ্রী ইনস্টলেশন
-          </Badge>
-        </div>
+        {plan.name !== 'ট্রায়াল' && (
+          <div className="mt-4">
+            <Badge variant="destructive" className="font-bangla text-base py-1 px-3">
+              <BadgeCheck className="h-4 w-4 mr-2" />
+              ফ্রী ইনস্টলেশন
+            </Badge>
+          </div>
+        )}
       </CardContent>
-      <CardFooter className="flex flex-col items-start p-6 pt-0">
-        <div className="border-t w-full mt-4 pt-4 text-sm text-muted-foreground">
-          <p className="font-bangla font-semibold mb-2 text-foreground">
-            হার্ডওয়্যার অ্যাড-অনস:
-          </p>
-          <ul className="space-y-3 font-bangla">
-            {hardwareAddons.map((addon) => (
-              <li key={addon.id} className="flex items-center">
-                <Checkbox
-                  id={`${plan.name}-${addon.id}`}
-                  onCheckedChange={() => handleAddonCheck(addon.id)}
-                  className="mr-3"
-                />
-                <Label
-                  htmlFor={`${plan.name}-${addon.id}`}
-                  className="flex items-center cursor-pointer text-sm w-full"
-                >
-                  {addon.icon}
-                  <span>{addon.name}</span>
-                  {addon.price > 0 && (
-                    <span className="ml-auto font-semibold text-primary">
-                      + ৳{formatPrice(addon.price)}
-                    </span>
-                  )}
-                </Label>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <CardFooter className="flex flex-col items-start p-6 pt-0 mt-auto">
+         {plan.name !== 'ট্রায়াল' && (
+          <div className="border-t w-full mt-4 pt-4 text-sm text-muted-foreground">
+            <p className="font-bangla font-semibold mb-2 text-foreground">
+              হার্ডওয়্যার অ্যাড-অনস:
+            </p>
+            <ul className="space-y-3 font-bangla">
+              {hardwareAddons.map((addon) => (
+                <li key={addon.id} className="flex items-center">
+                  <Checkbox
+                    id={`${plan.name}-${addon.id}`}
+                    onCheckedChange={() => handleAddonCheck(addon.id)}
+                    className="mr-3"
+                  />
+                  <Label
+                    htmlFor={`${plan.name}-${addon.id}`}
+                    className="flex items-center cursor-pointer text-sm w-full"
+                  >
+                    {addon.icon}
+                    <span>{addon.name}</span>
+                    {addon.price > 0 && (
+                      <span className="ml-auto font-semibold text-primary">
+                        + ৳{formatPrice(addon.price)}
+                      </span>
+                    )}
+                  </Label>
+                </li>
+              ))}
+            </ul>
+          </div>
+         )}
         <div className="w-full mt-6">
           <div className="text-center mb-4 p-2 rounded-lg bg-muted">
             <span className="font-bangla font-semibold text-foreground">
@@ -273,7 +293,7 @@ const PricingSection = () => {
             বার্ষিক (২ মাস ছাড়!)
           </Label>
         </div>
-        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-2 justify-center items-stretch">
+        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3 justify-center items-stretch">
           {plans.map((plan, index) => (
             <PricingCard
               key={index}
