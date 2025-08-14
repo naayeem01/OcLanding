@@ -2,9 +2,8 @@
 'use server';
 
 import { z } from 'zod';
-import fs from 'fs/promises';
-import path from 'path';
 import { revalidatePath } from 'next/cache';
+import { query } from '@/lib/db';
 
 const VideoSectionConfigSchema = z.object({
   isEnabled: z.boolean(),
@@ -18,44 +17,54 @@ const SiteConfigSchema = z.object({
 export type SiteConfig = z.infer<typeof SiteConfigSchema>;
 export type VideoSectionConfig = z.infer<typeof VideoSectionConfigSchema>;
 
-const configFilePath = path.join(process.cwd(), 'data', 'site-config.json');
 
-async function getSiteConfigFromFile(): Promise<SiteConfig> {
+async function getSiteConfigFromDb(): Promise<SiteConfig> {
   try {
-    await fs.access(configFilePath);
-    const data = await fs.readFile(configFilePath, 'utf-8');
-    return SiteConfigSchema.parse(JSON.parse(data));
+    const result = await query("SELECT config_value FROM site_config WHERE config_key = 'videoSection'", []) as any[];
+
+    if (result.length > 0) {
+      return {
+        videoSection: VideoSectionConfigSchema.parse(result[0].config_value)
+      };
+    }
   } catch (error) {
-    // If the file doesn't exist or is invalid, return a default config
-    return {
-      videoSection: {
-        isEnabled: false,
-        videoUrl: '',
-      },
-    };
+    console.error("Failed to parse site config from DB, returning default.", error);
   }
+
+  // Default config if not found or error
+  return {
+    videoSection: {
+      isEnabled: true,
+      videoUrl: 'https://www.youtube.com/embed/6owddgXj2qg',
+    },
+  };
 }
 
-async function saveSiteConfigToFile(config: SiteConfig) {
-  await fs.writeFile(configFilePath, JSON.stringify(config, null, 2), 'utf-8');
+async function saveSiteConfigToDb(config: SiteConfig) {
+  const videoConfigValue = JSON.stringify(config.videoSection);
+  const upsertQuery = `
+    INSERT INTO site_config (config_key, config_value) 
+    VALUES ('videoSection', ?)
+    ON DUPLICATE KEY UPDATE config_value = ?;
+  `;
+  await query(upsertQuery, [videoConfigValue, videoConfigValue]);
 }
 
 export async function getSiteConfig(): Promise<SiteConfig> {
-  return await getSiteConfigFromFile();
+  return await getSiteConfigFromDb();
 }
 
 export async function updateVideoSectionConfig(config: VideoSectionConfig): Promise<{ success: boolean; error?: string }> {
-  const validation = VideoSectionConfigSchema.safeParse(config);
+  const validation = VideoSectioneConfigSchema.safeParse(config);
   if (!validation.success) {
     return { success: false, error: 'Invalid configuration provided.' };
   }
 
   try {
-    const currentConfig = await getSiteConfigFromFile();
+    const currentConfig = await getSiteConfigFromDb();
     currentConfig.videoSection = validation.data;
-    await saveSiteConfigToFile(currentConfig);
+    await saveSiteConfigToDb(currentConfig);
     
-    // Revalidate the homepage to show changes immediately
     revalidatePath('/');
     revalidatePath('/admin/dashboard');
 

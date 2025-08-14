@@ -1,3 +1,4 @@
+
 'use client';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -116,7 +117,7 @@ function OrderConfirmationContent() {
                         আপনার পেমেন্ট যাচাই করার পর আমরা আপনার অর্ডারটি সম্পন্ন করব।
                     </p>
                     <p className="font-bangla text-2xl font-bold">
-                        সর্বমোট মূল্য: ৳{orderDetails?.amount}
+                        সর্বমোট মূল্য: ৳{orderDetails?.totalPrice || orderDetails?.amount}
                     </p>
                     <p className="font-bangla text-muted-foreground">
                         আমাদের একজন প্রতিনিধি শীঘ্রই আপনার সাথে যোগাযোগ করবে।

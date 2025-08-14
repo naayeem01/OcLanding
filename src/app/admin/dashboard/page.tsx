@@ -16,6 +16,9 @@ import UpdateStatusControl from './_components/update-status-button';
 import { getSiteConfig } from '@/app/actions/site-config';
 import VideoSettings from './_components/video-settings';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import DbSetupButton from './_components/db-setup-button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Terminal } from 'lucide-react';
 
 const statusColors: { [key: string]: string } = {
     'Pending': 'bg-yellow-100 text-yellow-800',
@@ -47,6 +50,19 @@ export default async function AdminDashboard({
       <div className="container mx-auto p-8">
         <h1 className="text-2xl font-bold mb-4 font-bangla">অ্যাডমিন ড্যাশবোর্ড</h1>
         <p className="text-red-500 font-bangla">অর্ডার আনতে সমস্যা হয়েছে: {error}</p>
+         <Alert variant="destructive" className="mt-4">
+          <Terminal className="h-4 w-4" />
+          <AlertTitle className="font-bangla">ডাটাবেস সংযোগ ত্রুটি</AlertTitle>
+          <AlertDescription className="font-bangla space-y-2">
+           <p>ডাটাবেস থেকে তথ্য আনতে ব্যর্থ হয়েছে। অনুগ্রহ করে নিশ্চিত করুন:</p>
+            <ul className="list-disc list-inside">
+                <li>আপনার <code>.env</code> ফাইলে ডাটাবেসের সঠিক তথ্য (HOST, USER, PASSWORD, DATABASE) দেওয়া আছে।</li>
+                <li>ডাটাবেস সার্ভারটি চলছে।</li>
+                <li>'ডাটাবেস টেবিল তৈরি করুন' বাটনে ক্লিক করে টেবিলগুলো তৈরি করা হয়েছে।</li>
+            </ul>
+             <DbSetupButton />
+          </AlertDescription>
+        </Alert>
       </div>
     );
   }
@@ -142,7 +158,20 @@ export default async function AdminDashboard({
           </Card>
         </TabsContent>
         <TabsContent value="settings">
-          <VideoSettings initialConfig={siteConfig.videoSection} />
+          <div className="space-y-6">
+            <VideoSettings initialConfig={siteConfig.videoSection} />
+            <Card>
+              <CardHeader>
+                <CardTitle className="font-bangla">ডাটাবেস ম্যানেজমেন্ট</CardTitle>
+                 <CardDescription className="font-bangla">
+                    প্রথমবার ব্যবহারের জন্য বা টেবিল মুছে গেলে ডাটাবেস টেবিল তৈরি করতে এই বাটনটি ক্লিক করুন।
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <DbSetupButton />
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
       </Tabs>
     </div>

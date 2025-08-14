@@ -3,8 +3,7 @@
 
 import request from 'request';
 import { z } from 'zod';
-import fs from 'fs/promises';
-import path from 'path';
+import { query } from '@/lib/db';
 
 const OrderDetailsSchema = z.object({
   orderNumber: z.string(),
@@ -44,29 +43,11 @@ const OrderSchema = z.object({
   phone: z.string(),
   date: z.string(),
   status: OrderStatusSchema, 
-  paymentMethod: z.string().optional(),
-  transactionId: z.string().optional(),
-  totalPrice: z.string().optional(),
+  paymentMethod: z.string().optional().nullable(),
+  transactionId: z.string().optional().nullable(),
+  totalPrice: z.string().optional().nullable(),
 });
 export type Order = z.infer<typeof OrderSchema>;
-
-const ordersFilePath = path.join(process.cwd(), 'data', 'orders.json');
-
-async function getOrdersFromFile(): Promise<Order[]> {
-    try {
-        await fs.access(ordersFilePath);
-        const data = await fs.readFile(ordersFilePath, 'utf-8');
-        return JSON.parse(data);
-    } catch (error) {
-        // If the file doesn't exist, return an empty array
-        return [];
-    }
-}
-
-async function saveOrdersToFile(orders: Order[]) {
-    await fs.writeFile(ordersFilePath, JSON.stringify(orders, null, 2), 'utf-8');
-}
-
 
 async function sendSms(phone: string, message: string) {
   const options = {
@@ -123,23 +104,27 @@ async function sendStatusUpdateSms(phone: string, orderNumber: string, status: O
 }
 
 
-async function appendToLocalFile(details: OrderDetails, status: OrderStatus) {
+async function saveOrderToDb(details: OrderDetails, status: OrderStatus, paymentMethod?: string, transactionId?: string) {
   try {
-    const orders = await getOrdersFromFile();
-    const newOrder: Order = {
-      orderNumber: details.orderNumber,
-      name: details.name,
-      phone: details.phone,
-      date: new Date().toISOString(),
-      status: status,
-      totalPrice: details.totalPrice,
-    };
-    orders.push(newOrder);
-    await saveOrdersToFile(orders);
-    console.log('Appended to local file successfully');
+    const insertQuery = `
+      INSERT INTO orders (orderNumber, name, phone, date, status, paymentMethod, transactionId, totalPrice)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    const params = [
+      details.orderNumber,
+      details.name,
+      details.phone,
+      new Date(),
+      status,
+      paymentMethod || null,
+      transactionId || null,
+      details.totalPrice
+    ];
+    await query(insertQuery, params);
+    console.log('Order saved to database successfully');
   } catch (error) {
-    console.error('Error appending to local file:', error);
-    // We don't re-throw the error to not fail the whole process if the file write fails
+    console.error('Error saving order to database:', error);
+    throw new Error('Failed to save order to database.');
   }
 }
 
@@ -154,7 +139,7 @@ export async function processOrder(details: OrderDetails) {
   // Run both in parallel
   await Promise.all([
     sendWelcomeSms(validatedDetails),
-    appendToLocalFile(validatedDetails, 'Confirmed'),
+    saveOrderToDb(validatedDetails, 'Confirmed'),
   ]);
 }
 
@@ -164,28 +149,23 @@ export async function createManualOrder(details: ManualOrderDetails) {
     throw new Error('Invalid manual order details');
   }
   const validatedDetails = validation.data;
-  const orders = await getOrdersFromFile();
-  const newOrder: Order = {
-      orderNumber: validatedDetails.orderNumber,
-      name: validatedDetails.name,
-      phone: validatedDetails.phone,
-      date: new Date().toISOString(),
-      status: 'Pending',
-      paymentMethod: validatedDetails.paymentMethod,
-      transactionId: validatedDetails.transactionId,
-      totalPrice: validatedDetails.totalPrice,
-  };
-  orders.push(newOrder);
-  await saveOrdersToFile(orders);
+  await saveOrderToDb(validatedDetails, 'Pending', validatedDetails.paymentMethod, validatedDetails.transactionId);
+
+  const [newOrder] = await query('SELECT * FROM orders WHERE orderNumber = ?', [validatedDetails.orderNumber]) as any[];
   return { success: true, order: newOrder };
 }
 
 export async function getOrders(): Promise<{orders: Order[], error?: string}> {
   try {
-    const orders = await getOrdersFromFile();
-    return { orders: orders.reverse() }; // Show most recent first
+    const orders = await query('SELECT * FROM orders ORDER BY date DESC', []) as Order[];
+    // Dates need to be converted to string to be serializable for client components
+    const serializableOrders = orders.map(order => ({
+        ...order,
+        date: new Date(order.date).toISOString(),
+    }));
+    return { orders: serializableOrders };
   } catch (error) {
-    console.error('Error fetching from local file:', error);
+    console.error('Error fetching from database:', error);
     return { orders: [], error: 'Failed to fetch orders.' };
   }
 }
@@ -197,18 +177,13 @@ export async function updateOrderStatus(orderNumber: string, status: OrderStatus
     }
 
     try {
-        const orders = await getOrdersFromFile();
-        const orderIndex = orders.findIndex(o => o.orderNumber === orderNumber);
+        const updateQuery = 'UPDATE orders SET status = ? WHERE orderNumber = ?';
+        await query(updateQuery, [status, orderNumber]);
 
-        if (orderIndex === -1) {
-            return { success: false, error: 'Order not found' };
+        const [order] = await query('SELECT phone FROM orders WHERE orderNumber = ?', [orderNumber]) as any[];
+        if (order) {
+            await sendStatusUpdateSms(order.phone, orderNumber, status);
         }
-        
-        const order = orders[orderIndex];
-        order.status = status;
-        
-        await saveOrdersToFile(orders);
-        await sendStatusUpdateSms(order.phone, order.orderNumber, status);
 
         return { success: true };
     } catch (error) {
