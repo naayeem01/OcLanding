@@ -1,26 +1,83 @@
 'use client';
-
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { useToast } from '@/hooks/use-toast';
+import { submitOrder } from '@/app/actions/sms';
 
 const hardwareAddons: { [key: string]: { name: string; price: number } } = {
   barcodeScanner: { name: 'বারকোড স্ক্যানার', price: 1499 },
   posPrinter: { name: 'পস প্রিন্টার', price: 3999 },
 };
 
+const formSchema = z.object({
+  name: z.string().min(1, 'নাম প্রয়োজন'),
+  email: z.string().email('সঠিক ইমেল ঠিকানা লিখুন'),
+  phone: z.string().min(11, 'সঠিক ফোন নম্বর লিখুন'),
+  address: z.string().optional(),
+});
+
+type CheckoutFormValues = z.infer<typeof formSchema>;
+
 export default function CheckoutForm() {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const { toast } = useToast();
+
   const planName = searchParams.get('plan') || 'N/A';
   const totalPrice = searchParams.get('totalPrice') || '0';
-  const addons = searchParams.get('addons')?.split(',') || [];
+  const addons = searchParams.get('addons')?.split(',').filter(a => a) || [];
   const planPrice = searchParams.get('planPrice') || '0';
   const period = searchParams.get('period') || '';
 
-  const hasAddons = addons.length > 0 && addons[0] !== '';
+  const hasAddons = addons.length > 0;
+  
+  const form = useForm<CheckoutFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: '',
+      address: '',
+    },
+  });
+
+  const onSubmit = async (data: CheckoutFormValues) => {
+    try {
+      await submitOrder({
+        ...data,
+        planName,
+        totalPrice,
+        addons: addons.map(key => hardwareAddons[key].name),
+        planPrice,
+        period,
+      });
+
+      router.push(`/order-confirmation?name=${data.name}&plan=${planName}&totalPrice=${totalPrice}`);
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'একটি ত্রুটি ঘটেছে।',
+        description:
+          'আপনার অর্ডার সম্পন্ন করার সময় একটি ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন.',
+      });
+    }
+  };
+
 
   return (
     <div className="grid md:grid-cols-2 gap-12">
@@ -30,50 +87,68 @@ export default function CheckoutForm() {
           <CardHeader>
             <CardTitle className="font-bangla">অর্ডার তথ্য</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="name" className="font-bangla">
-                আপনার নাম
-              </Label>
-              <Input id="name" placeholder="আপনার সম্পূর্ণ নাম" className="font-bangla" />
-            </div>
-            <div>
-              <Label htmlFor="email" className="font-bangla">
-                আপনার ইমেল
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="আপনার ইমেল ঠিকানা"
-                className="font-bangla"
-              />
-            </div>
-            <div>
-              <Label htmlFor="phone" className="font-bangla">
-                ফোন নম্বর
-              </Label>
-              <Input
-                id="phone"
-                type="tel"
-                placeholder="আপনার ফোন নম্বর"
-                className="font-bangla"
-              />
-            </div>
-            {hasAddons && (
-              <div>
-                <Label htmlFor="address" className="font-bangla">
-                  ডেলিভারি ঠিকানা
-                </Label>
-                <Input
-                  id="address"
-                  placeholder="আপনার ডেলিভারি ঠিকানা"
-                  className="font-bangla"
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-bangla">আপনার নাম</FormLabel>
+                      <FormControl>
+                        <Input placeholder="আপনার সম্পূর্ণ নাম" {...field} className="font-bangla" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-            )}
-            <Button className="w-full font-bangla" size="lg">
-              অর্ডার সম্পন্ন করুন
-            </Button>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-bangla">আপনার ইমেল</FormLabel>
+                      <FormControl>
+                        <Input type="email" placeholder="আপনার ইমেল ঠিকানা" {...field} className="font-bangla" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-bangla">ফোন নম্বর</FormLabel>
+                      <FormControl>
+                        <Input type="tel" placeholder="আপনার ফোন নম্বর" {...field} className="font-bangla" />
+                      </FormControl>
+                       <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {hasAddons && (
+                  <FormField
+                    control={form.control}
+                    name="address"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-bangla">ডেলিভারি ঠিকানা</FormLabel>
+                        <FormControl>
+                          <Input placeholder="আপনার ডেলিভারি ঠিকানা" {...field} className="font-bangla" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                <Button type="submit" className="w-full font-bangla" size="lg" disabled={form.formState.isSubmitting}>
+                   {form.formState.isSubmitting ? 'অর্ডার করা হচ্ছে...' : 'অর্ডার সম্পন্ন করুন'}
+                </Button>
+              </form>
+            </Form>
           </CardContent>
         </Card>
       </div>
