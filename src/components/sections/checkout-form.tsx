@@ -3,7 +3,6 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,7 +16,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { submitOrder } from '@/app/actions/sms';
+import { initiatePayment } from '@/app/actions/payment';
 
 const hardwareAddons: { [key: string]: { name: string; price: number } } = {
   barcodeScanner: { name: 'বারকোড স্ক্যানার', price: 1499 },
@@ -58,22 +57,35 @@ export default function CheckoutForm() {
 
   const onSubmit = async (data: CheckoutFormValues) => {
     try {
-      await submitOrder({
-        ...data,
-        planName,
-        totalPrice,
-        addons: addons.map(key => hardwareAddons[key].name),
-        planPrice,
-        period,
-      });
+      const paymentDetails = {
+        full_name: data.name,
+        email: data.email,
+        amount: parseFloat(totalPrice),
+        metadata: {
+          planName,
+          totalPrice,
+          addons: addons.map(key => hardwareAddons[key].name),
+          planPrice,
+          period,
+          phone: data.phone,
+          address: data.address
+        },
+      };
 
-      router.push(`/order-confirmation?name=${data.name}&plan=${planName}&totalPrice=${totalPrice}`);
+      const result = await initiatePayment(paymentDetails);
+
+      if (result.payment_url) {
+        router.push(result.payment_url);
+      } else {
+        throw new Error('Failed to get payment URL');
+      }
+
     } catch (error) {
       toast({
         variant: 'destructive',
         title: 'একটি ত্রুটি ঘটেছে।',
         description:
-          'আপনার অর্ডার সম্পন্ন করার সময় একটি ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন.',
+          'আপনার পেমেন্ট শুরু করার সময় একটি ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন.',
       });
     }
   };
@@ -145,7 +157,7 @@ export default function CheckoutForm() {
                   />
                 )}
                 <Button type="submit" className="w-full font-bangla" size="lg" disabled={form.formState.isSubmitting}>
-                   {form.formState.isSubmitting ? 'অর্ডার করা হচ্ছে...' : 'অর্ডার সম্পন্ন করুন'}
+                   {form.formState.isSubmitting ? 'পেমেন্ট করা হচ্ছে...' : 'পেমেন্ট করুন'}
                 </Button>
               </form>
             </Form>
