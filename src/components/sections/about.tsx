@@ -30,7 +30,7 @@ const AboutSection = () => {
             <p className="text-lg text-foreground font-bangla mb-6">
               <span className="font-bold text-primary">ঔষধক্লাউড</span> একটি
               অত্যাধুনিক, ক্লাউড-ভিত্তিক ফার্মাসি ম্যানেজমেন্ট এবং
-              পয়েন্ট-অফ-সেল (পিওএস) সফ্টওয়্যার যা বিশেষভাবে বাংলাদেশের ফার্মাসি
+              পয়েন্ট-অফ-সেল (POS) সফ্টওয়্যার যা বিশেষভাবে বাংলাদেশের ফার্মাসি
               মালিক, ক্লিনিক অপারেটর এবং ওষুধ পরিবেশকদের জন্য ডিজাইন করা হয়েছে।
             </p>
             <ul className="space-y-3 font-bangla text-lg">
