@@ -1,56 +1,116 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Check } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Check, Printer, Barcode } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
-const pricingPlans = [
-  {
-    name: 'বিনামূল্যে ট্রায়াল',
-    price: '৳০',
-    period: '১৪ দিনের জন্য',
-    description: 'কোনো প্রতিশ্রুতি ছাড়াই সমস্ত বৈশিষ্ট্য অন্বেষণ করুন।',
-    features: [
-      'সম্পূর্ণ পিওএস এবং বিলিং অ্যাক্সেস',
-      'ইনভেন্টরি ম্যানেজমেন্ট',
-      'বিক্রয় বিশ্লেষণ',
-      '২৪/৭ সাপোর্ট',
-    ],
-    isPopular: false,
-    cta: 'বিনামূল্যে ট্রায়াল শুরু করুন',
-  },
-  {
-    name: 'স্ট্যান্ডার্ড',
-    price: '৳১,৫০০',
-    period: '/মাস',
-    description: 'একক-শাখা ফার্মেসির জন্য উপযুক্ত।',
-    features: [
-      'বিনামূল্যে ট্রায়ালের সমস্ত বৈশিষ্ট্য',
-      'একাধিক-ব্যবহারকারী অ্যাক্সেস',
-      'ওষুধের মেয়াদ উত্তীর্ণের সতর্কতা',
-      'ক্লাউড ব্যাকআপ',
-    ],
-    isPopular: true,
-    cta: 'স্ট্যান্ডার্ড বেছে নিন',
-  },
-  {
-    name: 'প্রফেশনাল',
-    price: '৳২,৫০০',
-    period: '/মাস',
-    description: 'একাধিক-শাখা পরিচালনা এবং ক্রমবর্ধমান ব্যবসার জন্য আদর্শ।',
-    features: [
-      'স্ট্যান্ডার্ডের সমস্ত বৈশিষ্ট্য',
-      'একাধিক-শাখা সমর্থন',
-      'উন্নত রিপোর্টিং',
-      'ZKTeco ডিভাইস ইন্টিগ্রেশন',
-    ],
-    isPopular: false,
-    cta: 'প্রফেশনাল বেছে নিন',
-  },
-];
+const pricingPlans = {
+  monthly: [
+    {
+      name: 'বিনামূল্যে ট্রায়াল',
+      price: '৳০',
+      period: '১৪ দিনের জন্য',
+      description: 'কোনো প্রতিশ্রুতি ছাড়াই সমস্ত বৈশিষ্ট্য অন্বেষণ করুন।',
+      features: [
+        'সম্পূর্ণ পিওএস এবং বিলিং অ্যাক্সেস',
+        'ইনভেন্টরি ম্যানেজমেন্ট',
+        'বিক্রয় বিশ্লেষণ',
+        '২৪/৭ সাপোর্ট',
+      ],
+      isPopular: false,
+      cta: 'বিনামূল্যে ট্রায়াল শুরু করুন',
+    },
+    {
+      name: 'স্ট্যান্ডার্ড',
+      price: '৳১,৫০০',
+      period: '/মাস',
+      description: 'একক-শাখা ফার্মেসির জন্য উপযুক্ত।',
+      features: [
+        'বিনামূল্যে ট্রায়ালের সমস্ত বৈশিষ্ট্য',
+        'একাধিক-ব্যবহারকারী অ্যাক্সেস',
+        'ওষুধের মেয়াদ উত্তীর্ণের সতর্কতা',
+        'ক্লাউড ব্যাকআপ',
+      ],
+      isPopular: true,
+      cta: 'স্ট্যান্ডার্ড বেছে নিন',
+    },
+    {
+      name: 'প্রফেশনাল',
+      price: '৳২,৫০০',
+      period: '/মাস',
+      description: 'একাধিক-শাখা পরিচালনা এবং ক্রমবর্ধমান ব্যবসার জন্য আদর্শ।',
+      features: [
+        'স্ট্যান্ডার্ডের সমস্ত বৈশিষ্ট্য',
+        'একাধিক-শাখা সমর্থন',
+        'উন্নত রিপোর্টিং',
+        'ZKTeco ডিভাইস ইন্টিগ্রেশন',
+      ],
+      isPopular: false,
+      cta: 'প্রফেশনাল বেছে নিন',
+    },
+  ],
+  yearly: [
+    {
+      name: 'বিনামূল্যে ট্রায়াল',
+      price: '৳০',
+      period: '১৪ দিনের জন্য',
+      description: 'কোনো প্রতিশ্রুতি ছাড়াই সমস্ত বৈশিষ্ট্য অন্বেষণ করুন।',
+      features: [
+        'সম্পূর্ণ পিওএস এবং বিলিং অ্যাক্সেস',
+        'ইনভেন্টরি ম্যানেজমেন্ট',
+        'বিক্রয় বিশ্লেষণ',
+        '২৪/৭ সাপোর্ট',
+      ],
+      isPopular: false,
+      cta: 'বিনামূল্যে ট্রায়াল শুরু করুন',
+    },
+    {
+      name: 'স্ট্যান্ডার্ড',
+      price: '৳১৫,০০০',
+      period: '/বছর',
+      description: 'একক-শাখা ফার্মেসির জন্য উপযুক্ত।',
+      features: [
+        'বিনামূল্যে ট্রায়ালের সমস্ত বৈশিষ্ট্য',
+        'একাধিক-ব্যবহারকারী অ্যাক্সেস',
+        'ওষুধের মেয়াদ উত্তীর্ণের সতর্কতা',
+        'ক্লাউড ব্যাকআপ',
+      ],
+      isPopular: true,
+      cta: 'স্ট্যান্ডার্ড বেছে নিন',
+    },
+    {
+      name: 'প্রফেশনাল',
+      price: '৳২৫,০০০',
+      period: '/বছর',
+      description: 'একাধিক-শাখা পরিচালনা এবং ক্রমবর্ধমান ব্যবসার জন্য আদর্শ।',
+      features: [
+        'স্ট্যান্ডার্ডের সমস্ত বৈশিষ্ট্য',
+        'একাধিক-শাখা সমর্থন',
+        'উন্নত রিপোর্টিং',
+        'ZKTeco ডিভাইস ইন্টিগ্রেশন',
+      ],
+      isPopular: false,
+      cta: 'প্রফেশনাল বেছে নিন',
+    },
+  ],
+};
 
 const PricingSection = () => {
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
+
+  const plans = pricingPlans[billingCycle];
+
   return (
     <section id="pricing" className="py-16 sm:py-24 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -62,8 +122,17 @@ const PricingSection = () => {
             আপনার প্রয়োজন অনুযায়ী সেরা প্ল্যানটি বেছে নিন।
           </p>
         </div>
+        <div className="flex justify-center items-center gap-4 my-8">
+          <Label htmlFor="billing-cycle" className="font-bangla text-lg">মাসিক</Label>
+          <Switch
+            id="billing-cycle"
+            checked={billingCycle === 'yearly'}
+            onCheckedChange={(checked) => setBillingCycle(checked ? 'yearly' : 'monthly')}
+          />
+          <Label htmlFor="billing-cycle" className="font-bangla text-lg">বার্ষিক (২ মাস ছাড়!)</Label>
+        </div>
         <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3 justify-center">
-          {pricingPlans.map((plan, index) => (
+          {plans.map((plan, index) => (
             <Card
               key={index}
               className={cn(
@@ -73,6 +142,13 @@ const PricingSection = () => {
             >
               {plan.isPopular && (
                 <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 font-bangla">সবচেয়ে জনপ্রিয়</Badge>
+              )}
+              {billingCycle === 'yearly' && plan.name !== 'বিনামূল্যে ট্রায়াল' && (
+                 <div className="absolute top-2 right-2 rotate-12">
+                   <span className="inline-block bg-red-500 text-white text-xs font-bold font-bangla px-3 py-1 rounded-full uppercase shadow-md">
+                     ফ্রি ইনস্টলেশন
+                   </span>
+                 </div>
               )}
               <CardHeader className="p-6">
                 <CardTitle className="text-2xl font-bold font-bangla">{plan.name}</CardTitle>
@@ -92,10 +168,25 @@ const PricingSection = () => {
                   ))}
                 </ul>
               </CardContent>
-              <CardFooter className="p-6">
-                <Button className="w-full font-bangla" variant={plan.isPopular ? 'default' : 'outline'}>
-                  {plan.cta}
-                </Button>
+              <CardFooter className="flex flex-col items-start p-6">
+                 <div className="w-full">
+                   <Button className="w-full font-bangla" variant={plan.isPopular ? 'default' : 'outline'}>
+                     {plan.cta}
+                   </Button>
+                 </div>
+                 <div className="border-t w-full mt-4 pt-4 text-sm text-muted-foreground">
+                   <p className="font-bangla font-semibold mb-2 text-foreground">হার্ডওয়্যার অ্যাড-অনস:</p>
+                   <ul className="space-y-2 font-bangla">
+                     <li className="flex items-center">
+                       <Printer className="h-4 w-4 mr-2 text-primary" />
+                       <span>পস প্রিন্টার</span>
+                     </li>
+                     <li className="flex items-center">
+                       <Barcode className="h-4 w-4 mr-2 text-primary" />
+                       <span>বারকোড স্ক্যানার</span>
+                     </li>
+                   </ul>
+                 </div>
               </CardFooter>
             </Card>
           ))}

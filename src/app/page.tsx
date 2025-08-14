@@ -1,6 +1,7 @@
 import AboutSection from '@/components/sections/about';
 import CtaSection from '@/components/sections/cta';
 import FeaturesSection from '@/components/sections/features';
+import HardwareAddons from '@/components/sections/hardware-addons';
 import HeroSection from '@/components/sections/hero';
 import PricingSection from '@/components/sections/pricing';
 import TestimonialsSection from '@/components/sections/testimonials';
@@ -15,6 +16,7 @@ export default function Home() {
       <WhyChooseUsSection />
       <TestimonialsSection />
       <PricingSection />
+      <HardwareAddons />
       <CtaSection />
     </main>
   );
