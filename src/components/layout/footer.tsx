@@ -11,10 +11,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <OushodCloudLogo className="h-8 w-auto text-primary" />
-              <span className="text-xl font-bold text-foreground">
-                OushodCloud
-              </span>
+              <OushodCloudLogo className="h-auto" style={{ width: '170px' }} />
             </Link>
             <p className="text-sm text-muted-foreground font-bangla">
               আপনার ফার্মেসি ব্যবস্থাপনাকে সহজ, দ্রুত, এবং নির্ভরযোগ্য করতে আমরা

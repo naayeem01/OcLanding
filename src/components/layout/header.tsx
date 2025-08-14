@@ -27,7 +27,7 @@ const Header = () => {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2" aria-label="Home">
-          <OushodCloudLogo className="h-10 w-auto text-primary" />
+          <OushodCloudLogo className="h-auto" style={{ width: '170px' }} />
         </Link>
 
         <nav className="hidden md:flex md:items-center md:gap-6">
@@ -64,8 +64,7 @@ const Header = () => {
               <div className="flex flex-col h-full">
                 <div className="flex justify-between items-center p-4 border-b">
                    <Link href="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
-                    <OushodCloudLogo className="h-8 w-auto text-primary" />
-                    <span className="text-xl font-bold text-foreground">OushodCloud</span>
+                    <OushodCloudLogo className="h-auto" style={{ width: '150px' }} />
                   </Link>
                   <SheetClose asChild>
                      <Button variant="ghost" size="icon">
