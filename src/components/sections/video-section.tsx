@@ -1,5 +1,7 @@
 
 import { cn } from '@/lib/utils';
+import { Button } from '../ui/button';
+import Link from 'next/link';
 
 const VideoSection = ({ url }: { url: string }) => {
   // Extract video ID from URL for thumbnail
@@ -44,6 +46,11 @@ const VideoSection = ({ url }: { url: string }) => {
               allowFullScreen
             ></iframe>
           </div>
+        </div>
+        <div className="mt-10 text-center">
+            <Button size="lg" asChild>
+              <Link href="#pricing" className="font-bangla">মূল্য তালিকা দেখুন</Link>
+            </Button>
         </div>
       </div>
     </section>
