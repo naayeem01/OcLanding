@@ -18,10 +18,10 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navLinks = [
+    { href: '#about', label: 'আমাদের সম্পর্কে' },
     { href: '#features', label: 'বৈশিষ্ট্য' },
-    { href: '#why-us', label: 'কেন আমরা' },
-    { href: '#testimonials', label: 'প্রশংসাপত্র' },
     { href: '#pricing', label: 'মূল্য তালিকা' },
+    { href: '#testimonials', label: 'প্রশংসাপত্র' },
   ];
 
   return (
