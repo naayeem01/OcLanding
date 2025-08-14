@@ -2,6 +2,7 @@
 import { useSearchParams } from 'next/navigation';
 import CheckoutForm from '@/components/sections/checkout-form';
 import { Suspense } from 'react';
+import FloatingHelpButton from '@/components/ui/floating-help-button';
 
 function CheckoutPage() {
   return (
@@ -9,6 +10,7 @@ function CheckoutPage() {
       <Suspense fallback={<div>Loading...</div>}>
         <CheckoutForm />
       </Suspense>
+      <FloatingHelpButton />
     </div>
   );
 }

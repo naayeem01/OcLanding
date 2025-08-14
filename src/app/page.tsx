@@ -6,6 +6,7 @@ import HeroSection from '@/components/sections/hero';
 import PricingSection from '@/components/sections/pricing';
 import TestimonialsSection from '@/components/sections/testimonials';
 import WhyChooseUsSection from '@/components/sections/why-choose-us';
+import FloatingHelpButton from '@/components/ui/floating-help-button';
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       <PricingSection />
       <HardwareAddons />
       <CtaSection />
+      <FloatingHelpButton />
     </main>
   );
 }
