@@ -21,12 +21,14 @@ import Link from 'next/link';
 
 const parsePrice = (priceString: string | number): number => {
   if (typeof priceString === 'number') return priceString;
+  // This regex will remove currency symbols and commas, but keeps the digits.
   const price = parseInt(String(priceString).replace(/[^\d]/g, ''), 10);
   return isNaN(price) ? 0 : price;
 };
 
+
 const formatPrice = (price: number): string => {
-  return `৳${price.toLocaleString('en-IN')}`;
+    return `৳${price.toLocaleString('en-IN')}`;
 };
 
 const hardwareAddons = [
@@ -48,7 +50,7 @@ const pricingPlans = {
   monthly: [
     {
       name: 'স্ট্যান্ডার্ড',
-      price: '৳১,৫০০',
+      price: 1500,
       period: '/মাস',
       description: 'একক-শাখা ফার্মেসির জন্য উপযুক্ত।',
       features: [
@@ -65,7 +67,7 @@ const pricingPlans = {
     },
     {
       name: 'প্রফেশনাল',
-      price: '৳২,৫০০',
+      price: 2500,
       period: '/মাস',
       description: 'একাধিক-শাখা পরিচালনা এবং ক্রমবর্ধমান ব্যবসার জন্য আদর্শ।',
       features: [
@@ -80,7 +82,7 @@ const pricingPlans = {
   yearly: [
     {
       name: 'স্ট্যান্ডার্ড',
-      price: '৳১৫,০০০',
+      price: 15000,
       period: '/বছর',
       description: 'একক-শাখা ফার্মেসির জন্য উপযুক্ত।',
       features: [
@@ -97,7 +99,7 @@ const pricingPlans = {
     },
     {
       name: 'প্রফেশনাল',
-      price: '৳২৫,০০০',
+      price: 25000,
       period: '/বছর',
       description: 'একাধিক-শাখা পরিচালনা এবং ক্রমবর্ধমান ব্যবসার জন্য আদর্শ।',
       features: [
@@ -155,7 +157,7 @@ const PricingCard = ({ plan }: { plan: any }) => {
         </CardDescription>
         <div className="flex items-baseline gap-2 mt-4">
           <span className="text-4xl font-extrabold tracking-tight">
-            {plan.price}
+            {formatPrice(plan.price)}
           </span>
           <span className="text-sm font-medium text-muted-foreground font-bangla">
             {plan.period}
