@@ -76,6 +76,7 @@ const pricingPlans = {
       ],
       isPopular: false,
       cta: 'স্ট্যান্ডার্ড বেছে নিন',
+      installationFee: 499,
     },
     {
       name: 'প্রফেশনাল',
@@ -89,6 +90,7 @@ const pricingPlans = {
       ],
       isPopular: true,
       cta: 'প্রফেশনাল বেছে নিন',
+      hasFreeInstallation: true,
     },
   ],
   yearly: [
@@ -109,6 +111,7 @@ const pricingPlans = {
       ],
       isPopular: false,
       cta: 'স্ট্যান্ডার্ড বেছে নিন',
+      installationFee: 499,
     },
     {
       name: 'প্রফেশনাল',
@@ -119,7 +122,6 @@ const pricingPlans = {
       features: [
         'স্ট্যান্ডার্ডের সমস্ত বৈশিষ্ট্য',
         'উন্নত রিপোর্টিং',
-        'ফ্রি পস ডিভাইস',
         'ফ্রি পস প্রিন্টার',
       ],
       isPopular: true,
@@ -131,6 +133,7 @@ const pricingPlans = {
 
 const PricingCard = ({ plan }: { plan: any }) => {
   const isYearlyProfessional = plan.name === 'প্রফেশনাল' && plan.period === 'বার্ষিক';
+  const hasInstallationFee = plan.installationFee && plan.installationFee > 0;
 
   const [checkedAddons, setCheckedAddons] = useState<Record<string, boolean>>({
     barcodeScanner: false,
@@ -143,7 +146,6 @@ const PricingCard = ({ plan }: { plan: any }) => {
     const addonsPrice = Object.keys(checkedAddons).reduce((total, addonId) => {
       if (checkedAddons[addonId]) {
         const addon = hardwareAddons.find((a) => a.id === addonId);
-        // Don't add price for free printer on yearly pro plan
         if (addonId === 'posPrinter' && isYearlyProfessional) {
             return total;
         }
@@ -151,8 +153,9 @@ const PricingCard = ({ plan }: { plan: any }) => {
       }
       return total;
     }, 0);
-    return basePrice + addonsPrice;
-  }, [basePrice, checkedAddons, isYearlyProfessional]);
+    const installationPrice = plan.installationFee || 0;
+    return basePrice + addonsPrice + installationPrice;
+  }, [basePrice, checkedAddons, isYearlyProfessional, plan.installationFee]);
   
   const handleAddonCheck = (addonId: string) => {
     setCheckedAddons((prev) => ({ ...prev, [addonId]: !prev[addonId] }));
@@ -163,7 +166,6 @@ const PricingCard = ({ plan }: { plan: any }) => {
   }, [checkedAddons]);
   
   useEffect(() => {
-      // Ensure the printer is always checked for the yearly professional plan
       if (isYearlyProfessional) {
           setCheckedAddons(prev => ({...prev, posPrinter: true}));
       }
@@ -221,8 +223,17 @@ const PricingCard = ({ plan }: { plan: any }) => {
         )}
       </CardContent>
       <CardFooter className="flex flex-col items-start p-6 pt-0 mt-auto">
+        <div className="w-full">
          {plan.name !== 'ট্রায়াল' && (
           <div className="border-t w-full mt-4 pt-4 text-sm text-muted-foreground">
+            {hasInstallationFee && (
+                <div className='flex justify-between items-center mb-2 font-bangla'>
+                    <span>ইনস্টলেশন চার্জ (এককালীন)</span>
+                    <span className="font-semibold text-primary">
+                        + ৳{formatPrice(plan.installationFee)}
+                    </span>
+                </div>
+            )}
             <p className="font-bangla font-semibold mb-2 text-foreground">
               হার্ডওয়্যার অ্যাড-অনস:
             </p>
@@ -262,24 +273,25 @@ const PricingCard = ({ plan }: { plan: any }) => {
             </ul>
           </div>
          )}
-        <div className="w-full mt-6">
-          <div className="text-center mb-4 p-2 rounded-lg bg-muted">
-            <span className="font-bangla font-semibold text-foreground">
-              সর্বমোট মূল্য:{' '}
-            </span>
-            <span className="text-2xl font-bold text-primary">
-             ৳{formatPrice(totalPrice)}
-            </span>
+          <div className="w-full mt-6">
+            <div className="text-center mb-4 p-2 rounded-lg bg-muted">
+                <span className="font-bangla font-semibold text-foreground">
+                সর্বমোট মূল্য:{' '}
+                </span>
+                <span className="text-2xl font-bold text-primary">
+                ৳{formatPrice(totalPrice)}
+                </span>
+            </div>
+            <Button
+                className="w-full font-bangla"
+                variant={plan.isPopular ? 'default' : 'outline'}
+                asChild
+            >
+                <Link href={`/checkout?plan=${encodeURIComponent(plan.name)}&totalPrice=${totalPrice}&addons=${selectedAddons.join(',')}&planPrice=${plan.price}&period=${plan.period}`}>
+                {plan.cta}
+                </Link>
+            </Button>
           </div>
-          <Button
-            className="w-full font-bangla"
-            variant={plan.isPopular ? 'default' : 'outline'}
-            asChild
-          >
-            <Link href={`/checkout?plan=${encodeURIComponent(plan.name)}&totalPrice=${totalPrice}&addons=${selectedAddons.join(',')}&planPrice=${plan.price}&period=${plan.period}`}>
-              {plan.cta}
-            </Link>
-          </Button>
         </div>
       </CardFooter>
     </Card>
