@@ -8,14 +8,14 @@ const hardware = [
   {
     name: 'বারকোড স্ক্যানার',
     price: '৳১,৪৯৯',
-    image: 'https://placehold.co/600x400.png',
+    image: 'https://www.startech.com.bd/image/cache/catalog/scanner/winson/wnl-1051/wnl-1051-02-500x500.jpg',
     dataAiHint: 'barcode scanner',
     description: 'দ্রুত এবং নির্ভুলভাবে পণ্য স্ক্যান করে আপনার বিলিং প্রক্রিয়াটিকে আরও দ্রুত করুন।',
   },
   {
     name: 'পস প্রিন্টার',
     price: 'আলোচনা সাপেক্ষ',
-    image: 'https://placehold.co/600x400.png',
+    image: 'https://www.startech.com.bd/image/cache/catalog/printer/rongta/rp58e-u/rp58e-u-1-500x500.jpg',
     dataAiHint: 'pos printer',
     description: 'সহজেই পাঠযোগ্য এবং প্রফেশনাল মানের রশিদ প্রিন্ট করুন।',
   },

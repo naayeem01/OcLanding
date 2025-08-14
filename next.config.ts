@@ -21,6 +21,12 @@ const nextConfig: NextConfig = {
         hostname: 'oushodcloud.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.startech.com.bd',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
