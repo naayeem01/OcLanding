@@ -1,3 +1,21 @@
+import AboutSection from '@/components/sections/about';
+import CtaSection from '@/components/sections/cta';
+import FeaturesSection from '@/components/sections/features';
+import HeroSection from '@/components/sections/hero';
+import PricingSection from '@/components/sections/pricing';
+import TestimonialsSection from '@/components/sections/testimonials';
+import WhyChooseUsSection from '@/components/sections/why-choose-us';
+
 export default function Home() {
-  return <></>;
+  return (
+    <main className="flex flex-col">
+      <HeroSection />
+      <AboutSection />
+      <FeaturesSection />
+      <WhyChooseUsSection />
+      <TestimonialsSection />
+      <PricingSection />
+      <CtaSection />
+    </main>
+  );
 }

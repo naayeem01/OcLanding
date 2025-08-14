@@ -1,0 +1,45 @@
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import Image from 'next/image';
+
+const HeroSection = () => {
+  return (
+    <section className="relative bg-card pt-20 pb-10 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-24">
+      <div className="absolute inset-0 overflow-hidden">
+        <Image
+          src="https://placehold.co/1920x1080.png"
+          alt="Illustration of pharmacy POS and cloud software"
+          data-ai-hint="pharmacy software illustration"
+          layout="fill"
+          objectFit="cover"
+          className="opacity-10"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-card via-card to-transparent"></div>
+      </div>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-3xl mx-auto text-center">
+          <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+            The Modern Way to Manage Your Pharmacy
+            <span className="block text-primary font-bangla mt-2">
+              আপনার ফার্মেসি এখন আপনার হাতের মুঠোয়
+            </span>
+          </h1>
+          <p className="mt-6 text-lg text-muted-foreground sm:text-xl">
+            OushodCloud provides powerful, easy-to-use software to streamline
+            your pharmacy operations, from POS billing to inventory management.
+          </p>
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button size="lg" asChild>
+              <Link href="#pricing">Start Free Trial</Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <Link href="#features">Learn More</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default HeroSection;

@@ -1,0 +1,131 @@
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Facebook, Linkedin, Youtube } from 'lucide-react';
+import Link from 'next/link';
+import OushodCloudLogo from '../icons/oushod-cloud-logo';
+
+const Footer = () => {
+  return (
+    <footer className="bg-card text-card-foreground border-t">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="col-span-1 md:col-span-1">
+            <Link href="/" className="flex items-center gap-2 mb-4">
+              <OushodCloudLogo className="h-8 w-auto text-primary" />
+              <span className="text-xl font-bold text-foreground">
+                OushodCloud
+              </span>
+            </Link>
+            <p className="text-sm text-muted-foreground font-bangla">
+              আপনার ফার্মেসি ব্যবস্থাপনাকে সহজ, দ্রুত, এবং নির্ভরযোগ্য করতে আমরা
+              আছি আপনার পাশে।
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold text-foreground mb-4">
+              Quick Links
+            </h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link
+                  href="#features"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Features
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="#pricing"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="#testimonials"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Testimonials
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold text-foreground mb-4">
+              Legal
+            </h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link
+                  href="/privacy-policy"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/terms-of-service"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Terms & Conditions
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold text-foreground mb-4">
+              Contact Us
+            </h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>Email: contact@oushodcloud.com</li>
+              <li>Phone: +880 1234 567890</li>
+            </ul>
+            <div className="flex space-x-4 mt-4">
+              <Button variant="ghost" size="icon" asChild>
+                <Link
+                  href="#"
+                  aria-label="Facebook"
+                  className="text-muted-foreground hover:text-primary"
+                >
+                  <Facebook className="h-5 w-5" />
+                </Link>
+              </Button>
+              <Button variant="ghost" size="icon" asChild>
+                <Link
+                  href="#"
+                  aria-label="LinkedIn"
+                  className="text-muted-foreground hover:text-primary"
+                >
+                  <Linkedin className="h-5 w-5" />
+                </Link>
+              </Button>
+              <Button variant="ghost" size="icon" asChild>
+                <Link
+                  href="#"
+                  aria-label="YouTube"
+                  className="text-muted-foreground hover:text-primary"
+                >
+                  <Youtube className="h-5 w-5" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
+          <p>
+            &copy; {new Date().getFullYear()} OushodCloud. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
