@@ -16,7 +16,6 @@ import UpdateStatusControl from './_components/update-status-button';
 import { getSiteConfig } from '@/app/actions/site-config';
 import VideoSettings from './_components/video-settings';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import DbSetupButton from './_components/db-setup-button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Terminal } from 'lucide-react';
 
@@ -56,11 +55,9 @@ export default async function AdminDashboard({
           <AlertDescription className="font-bangla space-y-2">
            <p>ডাটাবেস থেকে তথ্য আনতে ব্যর্থ হয়েছে। অনুগ্রহ করে নিশ্চিত করুন:</p>
             <ul className="list-disc list-inside">
-                <li>আপনার <code>.env</code> ফাইলে ডাটাবেসের সঠিক তথ্য (HOST, USER, PASSWORD, DATABASE) দেওয়া আছে।</li>
-                <li>ডাটাবেস সার্ভারটি চলছে।</li>
-                <li>'ডাটাবেস টেবিল তৈরি করুন' বাটনে ক্লিক করে টেবিলগুলো তৈরি করা হয়েছে।</li>
+                <li>আপনার Firebase প্রকল্পটি সঠিকভাবে সেট আপ করা হয়েছে।</li>
+                <li>আপনার Firestore ডাটাবেস তৈরি করা হয়েছে এবং নিরাপত্তা নিয়মাবলী সঠিক।</li>
             </ul>
-             <DbSetupButton />
           </AlertDescription>
         </Alert>
       </div>
@@ -160,17 +157,6 @@ export default async function AdminDashboard({
         <TabsContent value="settings">
           <div className="space-y-6">
             <VideoSettings initialConfig={siteConfig.videoSection} />
-            <Card>
-              <CardHeader>
-                <CardTitle className="font-bangla">ডাটাবেস ম্যানেজমেন্ট</CardTitle>
-                 <CardDescription className="font-bangla">
-                    প্রথমবার ব্যবহারের জন্য বা টেবিল মুছে গেলে ডাটাবেস টেবিল তৈরি করতে এই বাটনটি ক্লিক করুন।
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <DbSetupButton />
-              </CardContent>
-            </Card>
           </div>
         </TabsContent>
       </Tabs>

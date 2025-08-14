@@ -3,7 +3,9 @@
 
 import request from 'request';
 import { z } from 'zod';
-import { query } from '@/lib/db';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, getDocs, query, where, updateDoc, doc, serverTimestamp, Timestamp, orderBy } from 'firebase/firestore';
+
 
 const OrderDetailsSchema = z.object({
   orderNumber: z.string(),
@@ -106,24 +108,26 @@ async function sendStatusUpdateSms(phone: string, orderNumber: string, status: O
 
 async function saveOrderToDb(details: OrderDetails, status: OrderStatus, paymentMethod?: string, transactionId?: string) {
   try {
-    const insertQuery = `
-      INSERT INTO orders (orderNumber, name, phone, date, status, paymentMethod, transactionId, totalPrice)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-    const params = [
-      details.orderNumber,
-      details.name,
-      details.phone,
-      new Date(),
-      status,
-      paymentMethod || null,
-      transactionId || null,
-      details.totalPrice
-    ];
-    await query(insertQuery, params);
-    console.log('Order saved to database successfully');
+    await addDoc(collection(db, 'orders'), {
+        orderNumber: details.orderNumber,
+        name: details.name,
+        phone: details.phone,
+        date: serverTimestamp(),
+        status: status,
+        paymentMethod: paymentMethod || null,
+        transactionId: transactionId || null,
+        totalPrice: details.totalPrice,
+        // Also save other details
+        email: details.email,
+        address: details.address || null,
+        planName: details.planName,
+        addons: details.addons,
+        planPrice: details.planPrice,
+        period: details.period,
+    });
+    console.log('Order saved to Firestore successfully');
   } catch (error) {
-    console.error('Error saving order to database:', error);
+    console.error('Error saving order to Firestore:', error);
     throw new Error('Failed to save order to database.');
   }
 }
@@ -151,21 +155,34 @@ export async function createManualOrder(details: ManualOrderDetails) {
   const validatedDetails = validation.data;
   await saveOrderToDb(validatedDetails, 'Pending', validatedDetails.paymentMethod, validatedDetails.transactionId);
 
-  const [newOrder] = await query('SELECT * FROM orders WHERE orderNumber = ?', [validatedDetails.orderNumber]) as any[];
+  // Firestore creates a unique ID, we can't return the new order directly like with SQL.
+  // The dashboard will refresh to show the new order.
+  // For the confirmation page, we can pass the manually created details.
+  const newOrder: Order = {
+    ...validatedDetails,
+    date: new Date().toISOString(),
+    status: 'Pending'
+  }
+
   return { success: true, order: newOrder };
 }
 
 export async function getOrders(): Promise<{orders: Order[], error?: string}> {
   try {
-    const orders = await query('SELECT * FROM orders ORDER BY date DESC', []) as Order[];
-    // Dates need to be converted to string to be serializable for client components
-    const serializableOrders = orders.map(order => ({
-        ...order,
-        date: new Date(order.date).toISOString(),
-    }));
-    return { orders: serializableOrders };
+    const q = query(collection(db, "orders"), orderBy("date", "desc"));
+    const querySnapshot = await getDocs(q);
+    const orders = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        const date = (data.date as Timestamp)?.toDate() || new Date();
+        return {
+            ...data,
+            date: date.toISOString(),
+        } as Order;
+    });
+
+    return { orders };
   } catch (error) {
-    console.error('Error fetching from database:', error);
+    console.error('Error fetching from firestore:', error);
     return { orders: [], error: 'Failed to fetch orders.' };
   }
 }
@@ -177,12 +194,19 @@ export async function updateOrderStatus(orderNumber: string, status: OrderStatus
     }
 
     try {
-        const updateQuery = 'UPDATE orders SET status = ? WHERE orderNumber = ?';
-        await query(updateQuery, [status, orderNumber]);
+        const q = query(collection(db, "orders"), where("orderNumber", "==", orderNumber));
+        const querySnapshot = await getDocs(q);
+        
+        if (querySnapshot.empty) {
+            return { success: false, error: "Order not found." };
+        }
+        
+        const orderDoc = querySnapshot.docs[0];
+        await updateDoc(doc(db, "orders", orderDoc.id), { status });
 
-        const [order] = await query('SELECT phone FROM orders WHERE orderNumber = ?', [orderNumber]) as any[];
-        if (order) {
-            await sendStatusUpdateSms(order.phone, orderNumber, status);
+        const orderData = orderDoc.data();
+        if (orderData) {
+            await sendStatusUpdateSms(orderData.phone, orderNumber, status);
         }
 
         return { success: true };
