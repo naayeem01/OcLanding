@@ -55,9 +55,9 @@ export default function DemoRequestModal({
     try {
       await submitDemoRequest(data);
       toast({
-        title: ' অনুরোধ সফল হয়েছে',
+        title: ' আবেদন সফল হয়েছে',
         description:
-          'আপনার ডেমো অনুরোধ সফলভাবে জমা দেওয়া হয়েছে। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।',
+          'আপনার ডেমো আবেদন সফলভাবে জমা দেওয়া হয়েছে। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।',
       });
       setOpen(false);
       form.reset();
@@ -66,7 +66,7 @@ export default function DemoRequestModal({
         variant: 'destructive',
         title: 'একটি ত্রুটি ঘটেছে।',
         description:
-          'আপনার ডেমো অনুরোধ জমা দেওয়ার সময় একটি ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন.',
+          'আপনার ডেমো আবেদন জমা দেওয়ার সময় একটি ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন.',
       });
     }
   };
@@ -77,7 +77,7 @@ export default function DemoRequestModal({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="font-bangla text-2xl">
-            ডেমোর জন্য অনুরোধ করুন
+            ডেমোর জন্য আবেদন করুন
           </DialogTitle>
           <DialogDescription className="font-bangla">
             অনুগ্রহ করে নিচের ফর্মটি পূরণ করুন এবং আমরা শীঘ্রই আপনার সাথে যোগাযোগ
@@ -161,7 +161,7 @@ export default function DemoRequestModal({
             >
               {form.formState.isSubmitting
                 ? 'জমা হচ্ছে...'
-                : 'অনুরোধ জমা দিন'}
+                : 'আবেদন জমা দিন'}
             </Button>
           </form>
         </Form>

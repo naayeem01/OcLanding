@@ -49,7 +49,7 @@ const Header = () => {
           </Button>
           <DemoRequestModal>
             <Button asChild>
-              <span className="font-bangla">ডেমোর জন্য অনুরোধ করুন</span>
+              <span className="font-bangla">ডেমোর জন্য আবেদন করুন</span>
             </Button>
           </DemoRequestModal>
         </div>
@@ -93,7 +93,7 @@ const Header = () => {
                   </Button>
                   <DemoRequestModal>
                     <Button className="w-full" asChild>
-                      <span className="font-bangla">ডেমোর জন্য অনুরোধ করুন</span>
+                      <span className="font-bangla">ডেমোর জন্য আবেদন করুন</span>
                     </Button>
                   </DemoRequestModal>
                 </div>
