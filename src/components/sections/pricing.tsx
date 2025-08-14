@@ -133,7 +133,7 @@ const pricingPlans = {
 
 const PricingCard = ({ plan }: { plan: any }) => {
   const isYearlyProfessional = plan.name === 'প্রফেশনাল' && plan.period === 'বার্ষিক';
-  const hasInstallationFee = plan.installationFee && plan.installationFee > 0;
+  const hasInstallationFee = plan.installationFee && plan.installationFee > 0 && !plan.hasFreeInstallation;
 
   const [checkedAddons, setCheckedAddons] = useState<Record<string, boolean>>({
     barcodeScanner: false,
@@ -153,9 +153,9 @@ const PricingCard = ({ plan }: { plan: any }) => {
       }
       return total;
     }, 0);
-    const installationPrice = plan.installationFee || 0;
+    const installationPrice = hasInstallationFee ? plan.installationFee : 0;
     return basePrice + addonsPrice + installationPrice;
-  }, [basePrice, checkedAddons, isYearlyProfessional, plan.installationFee]);
+  }, [basePrice, checkedAddons, isYearlyProfessional, plan.installationFee, hasInstallationFee]);
   
   const handleAddonCheck = (addonId: string) => {
     setCheckedAddons((prev) => ({ ...prev, [addonId]: !prev[addonId] }));
@@ -228,7 +228,7 @@ const PricingCard = ({ plan }: { plan: any }) => {
           <div className="border-t w-full mt-4 pt-4 text-sm text-muted-foreground">
             {hasInstallationFee && (
                 <div className='flex justify-between items-center mb-2 font-bangla'>
-                    <span>ইনস্টলেশন চার্জ (এককালীন)</span>
+                    <span className="font-bold">ইনস্টলেশন চার্জ (এককালীন)</span>
                     <span className="font-semibold text-primary">
                         + ৳{formatPrice(plan.installationFee)}
                     </span>
