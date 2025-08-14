@@ -15,7 +15,6 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import Link from 'next/link';
 import DemoRequestModal from './demo-request-modal';
 
 const parsePrice = (priceString: string | number): number => {
@@ -110,7 +109,7 @@ const pricingPlans = {
   ],
 };
 
-const PricingCard = ({ plan, isYearly }: { plan: any; isYearly: boolean }) => {
+const PricingCard = ({ plan }: { plan: any }) => {
   const [checkedAddons, setCheckedAddons] = useState<Record<string, boolean>>({
     barcodeScanner: false,
     posPrinter: false,
@@ -172,9 +171,9 @@ const PricingCard = ({ plan, isYearly }: { plan: any; isYearly: boolean }) => {
         </ul>
         <div className="mt-4">
           <Badge variant="secondary" className="font-bangla text-base py-1 px-3">
-              <BadgeCheck className="h-4 w-4 mr-2" />
-              বিনামূল্যে ইনস্টলেশন
-            </Badge>
+            <BadgeCheck className="h-4 w-4 mr-2" />
+            বিনামূল্যে ইনস্টলেশন
+          </Badge>
         </div>
       </CardContent>
       <CardFooter className="flex flex-col items-start p-6 pt-0">
@@ -266,7 +265,6 @@ const PricingSection = () => {
             <PricingCard
               key={index}
               plan={plan}
-              isYearly={billingCycle === 'yearly'}
             />
           ))}
         </div>
