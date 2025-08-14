@@ -15,10 +15,10 @@ export async function authenticate(credentials: z.infer<typeof LoginSchema>) {
   if (parsedCredentials.success) {
     const { email, password } = parsedCredentials.data;
     
-    // In a real application, you'd look up the user in a database.
-    // Here, we're using environment variables for simplicity.
-    const adminEmail = process.env.ADMIN_EMAIL;
-    const adminPassword = process.env.ADMIN_PASSWORD;
+    // For a production app, use environment variables.
+    // For this example, we'll hardcode them for simplicity.
+    const adminEmail = "admin@oushodcloud.com";
+    const adminPassword = "password";
 
     if (email === adminEmail && password === adminPassword) {
       cookies().set('auth', 'true', { httpOnly: true, path: '/' });
