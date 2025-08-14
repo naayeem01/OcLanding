@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -44,7 +45,7 @@ const Header = () => {
 
         <div className="hidden md:flex items-center gap-4">
           <Button variant="outline" asChild>
-            <Link href="#" className="font-bangla">লগইন</Link>
+            <Link href="https://oushodcloud.com/public/login" target="_blank" rel="noopener noreferrer" className="font-bangla">লগইন</Link>
           </Button>
           <DemoRequestModal>
             <Button asChild>
@@ -88,7 +89,7 @@ const Header = () => {
                 </nav>
                 <div className="mt-auto p-4 border-t space-y-4">
                   <Button variant="outline" className="w-full" asChild>
-                    <Link href="#" onClick={() => setIsMenuOpen(false)} className="font-bangla">লগইন</Link>
+                    <Link href="https://oushodcloud.com/public/login" target="_blank" rel="noopener noreferrer" onClick={() => setIsMenuOpen(false)} className="font-bangla">লগইন</Link>
                   </Button>
                   <DemoRequestModal>
                     <Button className="w-full" asChild>
