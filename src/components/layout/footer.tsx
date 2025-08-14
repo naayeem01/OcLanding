@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Facebook, Linkedin, Youtube } from 'lucide-react';
@@ -45,7 +46,7 @@ const Footer = () => {
                   href="#testimonials"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  প্রশংসাপত্র
+                  ব্যবহারকারীদের মতামত
                 </Link>
               </li>
             </ul>

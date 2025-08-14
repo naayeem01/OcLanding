@@ -21,7 +21,7 @@ const Header = () => {
     { href: '#about', label: 'আমাদের সম্পর্কে' },
     { href: '#features', label: 'বৈশিষ্ট্য' },
     { href: '#pricing', label: 'মূল্য তালিকা' },
-    { href: '#testimonials', label: 'প্রশংসাপত্র' },
+    { href: '#testimonials', label: 'ব্যবহারকারীদের মতামত' },
   ];
 
   return (
