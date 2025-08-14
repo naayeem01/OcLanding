@@ -31,7 +31,7 @@ const WhyChooseUsSection = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto">
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl font-bangla">
-            কেন ঔষধক্লাউড বেছে নেবেন?
+            কেন <span className="text-primary">ঔষধক্লাউড</span> বেছে নেবেন?
           </h2>
           <p className="mt-4 text-xl text-muted-foreground font-bangla">
             আমরা এমন একটি সমাধান প্রদান করি যা কেবল একটি সফ্টওয়্যার নয়, আপনার ফার্মেসির বৃদ্ধিতে একজন অংশীদার।

@@ -117,7 +117,9 @@ const Footer = () => {
 
         <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
           <p className="font-bangla">
-            &copy; {new Date().getFullYear()} ঔষধক্লাউড। সর্বস্বত্ব সংরক্ষিত।
+            &copy; {new Date().getFullYear()}{' '}
+            <span className="font-bold text-primary">ঔষধক্লাউড</span>।
+            সর্বস্বত্ব সংরক্ষিত।
           </p>
         </div>
       </div>

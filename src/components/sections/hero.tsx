@@ -27,7 +27,7 @@ const HeroSection = () => {
             </span>
           </h1>
           <p className="mt-6 text-lg text-muted-foreground sm:text-xl font-bangla">
-            ঔষধক্লাউড আপনার ফার্মেসির কার্যক্রম সহজ করার জন্য শক্তিশালী, সহজে ব্যবহারযোগ্য সফ্টওয়্যার সরবরাহ করে, যা পিওএস বিলিং থেকে ইনভেন্টরি ম্যানেজমেন্ট পর্যন্ত সবকিছু সহজ করে।
+            <span className="font-bold text-primary">ঔষধক্লাউড</span> আপনার ফার্মেসির কার্যক্রম সহজ করার জন্য শক্তিশালী, সহজে ব্যবহারযোগ্য সফ্টওয়্যার সরবরাহ করে, যা পিওএস বিলিং থেকে ইনভেন্টরি ম্যানেজমেন্ট পর্যন্ত সবকিছু সহজ করে।
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <DemoRequestModal>

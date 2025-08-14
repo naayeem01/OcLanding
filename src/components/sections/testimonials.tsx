@@ -74,7 +74,12 @@ const TestimonialsSection = () => {
                   <Card className="h-full flex flex-col">
                     <CardContent className="p-6 flex-1 flex flex-col justify-between">
                       <blockquote className="text-lg text-foreground italic border-l-4 border-primary pl-4 font-bangla">
-                        "{testimonial.quote}"
+                        "
+                        {testimonial.quote.replace(
+                          /ঔষধক্লাউড/g,
+                          '<span class="font-bold text-primary">ঔষধক্লাউড</span>'
+                        )}
+                        "
                       </blockquote>
                       <div className="mt-6 flex items-center">
                         <Avatar>

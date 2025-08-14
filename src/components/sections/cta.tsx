@@ -10,7 +10,8 @@ const CtaSection = () => {
           আজই শুরু করুন, আপনার ফার্মেসিকে সহজ করুন
         </h2>
         <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground font-bangla">
-          আর অপেক্ষা কেন? আজই আপনার ফার্মেসিকে আধুনিক করে তুলুন ঔষধক্লাউড এর সাথে।
+          আর অপেক্ষা কেন? আজই আপনার ফার্মেসিকে আধুনিক করে তুলুন{' '}
+          <span className="font-bold text-primary">ঔষধক্লাউড</span> এর সাথে।
           কোনো বাধ্যবাধকতা ছাড়াই বিনামূল্যে ট্রায়াল শুরু করুন।
         </p>
         <div className="mt-10">
