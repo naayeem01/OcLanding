@@ -17,9 +17,9 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 
-const parsePrice = (priceString: string): number => {
+const parsePrice = (priceString: string | number): number => {
   if (typeof priceString === 'number') return priceString;
-  const price = parseInt(priceString.replace(/[^\d]/g, ''), 10);
+  const price = parseInt(String(priceString).replace(/[^\d]/g, ''), 10);
   return isNaN(price) ? 0 : price;
 };
 
@@ -111,7 +111,7 @@ const pricingPlans = {
   ],
 };
 
-const PricingCard = ({ plan }: { plan: any; }) => {
+const PricingCard = ({ plan }: { plan: any }) => {
   const [checkedAddons, setCheckedAddons] = useState<Record<string, boolean>>({
     barcodeScanner: false,
     posPrinter: false,
@@ -134,8 +134,6 @@ const PricingCard = ({ plan }: { plan: any; }) => {
     setCheckedAddons((prev) => ({ ...prev, [addonId]: !prev[addonId] }));
   };
 
-  const isTrial = plan.name === 'বিনামূল্যে ট্রায়াল';
-
   return (
     <Card
       className={cn(
@@ -149,7 +147,9 @@ const PricingCard = ({ plan }: { plan: any; }) => {
         </Badge>
       )}
       <CardHeader className="p-6">
-        <CardTitle className="text-2xl font-bold font-bangla">{plan.name}</CardTitle>
+        <CardTitle className="text-2xl font-bold font-bangla">
+          {plan.name}
+        </CardTitle>
         <CardDescription className="text-base text-muted-foreground font-bangla h-12">
           {plan.description}
         </CardDescription>
@@ -202,13 +202,14 @@ const PricingCard = ({ plan }: { plan: any; }) => {
           </ul>
         </div>
         <div className="w-full mt-6">
-           <div className="text-center mb-4 p-2 rounded-lg bg-muted">
-             <span className="font-bangla font-semibold text-foreground">সর্বমোট মূল্য: </span>
-             <span className="text-2xl font-bold text-primary">{formatPrice(totalPrice)}</span>
-             <span className="text-sm font-medium text-muted-foreground font-bangla">
-                {plan.period}
-              </span>
-           </div>
+          <div className="text-center mb-4 p-2 rounded-lg bg-muted">
+            <span className="font-bangla font-semibold text-foreground">
+              সর্বমোট মূল্য:{' '}
+            </span>
+            <span className="text-2xl font-bold text-primary">
+              {formatPrice(totalPrice)}
+            </span>
+          </div>
           <Button
             className="w-full font-bangla"
             variant={plan.isPopular ? 'default' : 'outline'}
@@ -221,9 +222,10 @@ const PricingCard = ({ plan }: { plan: any; }) => {
   );
 };
 
-
 const PricingSection = () => {
-  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>(
+    'monthly'
+  );
   const plans = pricingPlans[billingCycle];
 
   return (
@@ -238,26 +240,41 @@ const PricingSection = () => {
           </p>
         </div>
         <div className="flex justify-center items-center gap-4 my-8">
-          <Label htmlFor="billing-cycle" className="font-bangla text-lg">মাসিক</Label>
+          <Label htmlFor="billing-cycle" className="font-bangla text-lg">
+            মাসিক
+          </Label>
           <Switch
             id="billing-cycle"
             checked={billingCycle === 'yearly'}
-            onCheckedChange={(checked) => setBillingCycle(checked ? 'yearly' : 'monthly')}
+            onCheckedChange={(checked) =>
+              setBillingCycle(checked ? 'yearly' : 'monthly')
+            }
           />
-          <Label htmlFor="billing-cycle" className="font-bangla text-lg">বার্ষিক (২ মাস ছাড়!)</Label>
+          <Label htmlFor="billing-cycle" className="font-bangla text-lg">
+            বার্ষিক (২ মাস ছাড়!)
+          </Label>
         </div>
         <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-2 justify-center items-stretch">
           {plans.map((plan, index) => (
-             <PricingCard key={index} plan={plan} />
+            <PricingCard key={index} plan={plan} />
           ))}
         </div>
         <div className="text-center mt-12 space-y-4">
-            <Button size="lg" variant="outline" asChild>
-                <Link href="#" className="font-bangla text-lg">ডেমোর জন্য অনুরোধ করুন</Link>
-            </Button>
-            <p className="text-muted-foreground font-bangla">
-            কাস্টম প্ল্যান প্রয়োজন? এন্টারপ্রাইজ সমাধানের জন্য <a href="mailto:contact@oushodcloud.com" className="text-primary hover:underline font-medium">আমাদের সাথে যোগাযোগ করুন</a>।
-            </p>
+          <Button size="lg" variant="outline" asChild>
+            <Link href="#" className="font-bangla text-lg">
+              ডেমোর জন্য অনুরোধ করুন
+            </Link>
+          </Button>
+          <p className="text-muted-foreground font-bangla">
+            কাস্টম প্ল্যান প্রয়োজন? এন্টারপ্রাইজ সমাধানের জন্য{' '}
+            <a
+              href="mailto:contact@oushodcloud.com"
+              className="text-primary hover:underline font-medium"
+            >
+              আমাদের সাথে যোগাযোগ করুন
+            </a>
+            ।
+          </p>
         </div>
       </div>
     </section>
