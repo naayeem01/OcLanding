@@ -30,7 +30,7 @@ const Footer = () => {
                   href="#features"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  বৈশিষ্ট্য
+                  ফিচার
                 </Link>
               </li>
               <li>
