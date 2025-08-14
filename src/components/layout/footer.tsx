@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Facebook, Linkedin, Youtube } from 'lucide-react';
 import Link from 'next/link';
 import OushodCloudLogo from '../icons/oushod-cloud-logo';
+import LegalDocumentModal from '../sections/legal-document-modal';
 
 const Footer = () => {
   return (
@@ -57,21 +58,19 @@ const Footer = () => {
               আইনি
             </h3>
             <ul className="space-y-2 text-sm font-bangla">
-              <li>
-                <Link
-                  href="/privacy-policy"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  গোপনীয়তা নীতি
-                </Link>
+               <li>
+                <LegalDocumentModal docType="privacy-policy">
+                  <span className="text-muted-foreground hover:text-primary transition-colors cursor-pointer">
+                    গোপনীয়তা নীতি
+                  </span>
+                </LegalDocumentModal>
               </li>
               <li>
-                <Link
-                  href="/terms-of-service"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  শর্তাবলী
-                </Link>
+                 <LegalDocumentModal docType="terms-of-service">
+                  <span className="text-muted-foreground hover:text-primary transition-colors cursor-pointer">
+                    শর্তাবলী
+                  </span>
+                </LegalDocumentModal>
               </li>
             </ul>
           </div>
