@@ -17,6 +17,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import DemoRequestModal from './demo-request-modal';
+import Link from 'next/link';
 
 const parsePrice = (priceString: string | number): number => {
   if (typeof priceString === 'number') return priceString;
