@@ -10,8 +10,7 @@ const HeroSection = () => {
   return (
     <section
       className={cn(
-        'relative bg-card pt-20 pb-10 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-24',
-        'medical-pattern'
+        'relative bg-card pt-20 pb-10 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-24'
       )}
     >
       <div className="absolute inset-0 overflow-hidden">

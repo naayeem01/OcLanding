@@ -53,7 +53,7 @@ const TestimonialsSection = () => {
   return (
     <section
       id="testimonials"
-      className={cn('py-16 sm:py-24 bg-card', 'medical-pattern')}
+      className={cn('py-16 sm:py-24 bg-card')}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
