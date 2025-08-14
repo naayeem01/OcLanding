@@ -46,7 +46,7 @@ const Header = () => {
             <Link href="#" className="font-bangla">লগইন</Link>
           </Button>
           <Button asChild>
-            <Link href="#pricing" className="font-bangla">বিনামূল্যে ট্রায়াল শুরু করুন</Link>
+            <Link href="#pricing" className="font-bangla">ডেমোর জন্য অনুরোধ করুন</Link>
           </Button>
         </div>
 
@@ -89,7 +89,7 @@ const Header = () => {
                     <Link href="#" onClick={() => setIsMenuOpen(false)} className="font-bangla">লগইন</Link>
                   </Button>
                   <Button className="w-full" asChild>
-                    <Link href="#pricing" onClick={() => setIsMenuOpen(false)} className="font-bangla">বিনামূল্যে ট্রায়াল শুরু করুন</Link>
+                    <Link href="#pricing" onClick={() => setIsMenuOpen(false)} className="font-bangla">ডেমোর জন্য অনুরোধ করুন</Link>
                   </Button>
                 </div>
               </div>
