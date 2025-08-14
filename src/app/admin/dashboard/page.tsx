@@ -12,11 +12,12 @@ import {
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import SearchBar from './_components/search-bar';
+import UpdateStatusButton from './_components/update-status-button';
 
 export default async function AdminDashboard({
   searchParams,
 }: {
-  searchParams: { search?: string; type?: string };
+  searchParams: { search?: string; type?: string, status?: string };
 }) {
   const cookieStore = cookies();
   const authCookie = cookieStore.get('auth');
@@ -37,17 +38,25 @@ export default async function AdminDashboard({
   }
 
   const filteredOrders = orders.filter(order => {
-    if (!searchParams.search) return true;
+    const statusFilter = !searchParams.status || searchParams.status === 'all' || order.status === searchParams.status;
+
+    if (!searchParams.search) return statusFilter;
+
     const searchTerm = searchParams.search.toLowerCase();
     const searchType = searchParams.type || 'orderNumber';
     
+    let matchesSearch = false;
     if (searchType === 'orderNumber') {
-        return order.orderNumber.toLowerCase().includes(searchTerm);
+        matchesSearch = order.orderNumber.toLowerCase().includes(searchTerm);
+    } else if (searchType === 'phone') {
+        matchesSearch = order.phone.toLowerCase().includes(searchTerm);
+    } else if (searchType === 'transactionId' && order.transactionId) {
+        matchesSearch = order.transactionId.toLowerCase().includes(searchTerm);
+    } else {
+        matchesSearch = true; // Default to true if search type is unknown
     }
-    if (searchType === 'phone') {
-        return order.phone.toLowerCase().includes(searchTerm);
-    }
-    return true;
+
+    return statusFilter && matchesSearch;
   });
 
 
@@ -67,8 +76,12 @@ export default async function AdminDashboard({
                   <TableHead className='font-bangla'>অর্ডার নম্বর</TableHead>
                   <TableHead className='font-bangla'>নাম</TableHead>
                   <TableHead className='font-bangla'>ফোন</TableHead>
+                   <TableHead className='font-bangla'>পেমেন্ট</TableHead>
+                   <TableHead className='font-bangla'>ট্রানজেকশন আইডি</TableHead>
+                   <TableHead className='font-bangla'>পরিমাণ</TableHead>
                   <TableHead className='font-bangla'>তারিখ</TableHead>
                   <TableHead className='font-bangla'>স্ট্যাটাস</TableHead>
+                  <TableHead className='font-bangla'>অ্যাকশন</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -78,19 +91,26 @@ export default async function AdminDashboard({
                       <TableCell>{order.orderNumber}</TableCell>
                       <TableCell>{order.name}</TableCell>
                       <TableCell>{order.phone}</TableCell>
+                      <TableCell>{order.paymentMethod || 'Online'}</TableCell>
+                      <TableCell>{order.transactionId || 'N/A'}</TableCell>
+                      <TableCell>৳{order.totalPrice || 'N/A'}</TableCell>
                       <TableCell>{new Date(order.date).toLocaleDateString('bn-BD')}</TableCell>
                       <TableCell>
                           <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                              order.status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                              order.status === 'Completed' ? 'bg-green-100 text-green-800' : 
+                              order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
                           }`}>
                               {order.status}
                           </span>
                       </TableCell>
+                       <TableCell>
+                           <UpdateStatusButton orderNumber={order.orderNumber} currentStatus={order.status} />
+                       </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center font-bangla">
+                    <TableCell colSpan={9} className="text-center font-bangla">
                       কোনো অর্ডার পাওয়া যায়নি।
                     </TableCell>
                   </TableRow>

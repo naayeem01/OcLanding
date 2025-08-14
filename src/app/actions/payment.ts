@@ -1,6 +1,7 @@
 'use server';
 import { z } from 'zod';
-import { processOrder } from './order';
+import { createManualOrder, processOrder } from './order';
+import { randomUUID } from 'crypto';
 
 const uddoktaPayApiKey = process.env.UDDOKTAPAY_API_KEY;
 const uddoktaPayBaseUrl = process.env.UDDOKTAPAY_BASE_URL;
@@ -22,6 +23,16 @@ const PaymentDetailsSchema = z.object({
 });
 
 type PaymentDetails = z.infer<typeof PaymentDetailsSchema>;
+
+const ManualPaymentDetailsSchema = PaymentDetailsSchema.extend({
+  metadata: PaymentDetailsSchema.shape.metadata.extend({
+    paymentMethod: z.string(),
+    transactionId: z.string(),
+  })
+});
+
+type ManualPaymentDetails = z.infer<typeof ManualPaymentDetailsSchema>;
+
 
 export async function initiatePayment(details: PaymentDetails) {
   const validation = PaymentDetailsSchema.safeParse(details);
@@ -59,6 +70,38 @@ export async function initiatePayment(details: PaymentDetails) {
     throw new Error('Failed to initiate payment');
   }
 }
+
+export async function processManualPayment(details: ManualPaymentDetails) {
+  const validation = ManualPaymentDetailsSchema.safeParse(details);
+  if (!validation.success) {
+    throw new Error('Invalid manual payment details');
+  }
+  const { full_name, email, metadata } = validation.data;
+  const { planName, totalPrice, addons, planPrice, period, phone, address, paymentMethod, transactionId } = metadata;
+  
+  const orderDetails = {
+      orderNumber: `manual-${randomUUID()}`,
+      name: full_name,
+      email,
+      phone,
+      address,
+      planName,
+      totalPrice,
+      addons,
+      planPrice,
+      period,
+      paymentMethod,
+      transactionId,
+  };
+
+  const result = await createManualOrder(orderDetails);
+  if (result.success) {
+      return { success: true, order: result.order };
+  } else {
+      throw new Error('Failed to create manual order');
+  }
+}
+
 
 export async function verifyPayment(invoiceId: string) {
     try {

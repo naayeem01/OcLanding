@@ -1,21 +1,39 @@
 'use client';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { CheckCircle2, AlertTriangle, Loader2 } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, Loader2, Clock } from 'lucide-react';
 import { Suspense, useEffect, useState } from 'react';
 import { verifyPayment } from '../actions/payment';
 import { useToast } from '@/hooks/use-toast';
+import { Order } from '../actions/order';
 
 function OrderConfirmationContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const invoiceId = searchParams.get('invoice_id');
+    const manualOrderData = searchParams.get('order');
     const { toast } = useToast();
 
-    const [status, setStatus] = useState<'loading' | 'success' | 'failed' | 'error'>('loading');
+    const [status, setStatus] = useState<'loading' | 'success' | 'failed' | 'error' | 'pending'>('loading');
     const [orderDetails, setOrderDetails] = useState<any>(null);
 
     useEffect(() => {
+        if (manualOrderData) {
+            try {
+                const order: Order = JSON.parse(manualOrderData);
+                setOrderDetails({
+                    customer: { full_name: order.name },
+                    metadata: { planName: 'N/A' }, // Plan name not passed for manual, adjust if needed
+                    amount: order.totalPrice,
+                });
+                setStatus('pending');
+            } catch (e) {
+                setStatus('error');
+            }
+            return;
+        }
+
+
         if (!invoiceId) {
             router.push('/');
             return;
@@ -46,7 +64,7 @@ function OrderConfirmationContent() {
         };
 
         checkPaymentStatus();
-    }, [invoiceId, router, toast]);
+    }, [invoiceId, router, toast, manualOrderData]);
 
     if (status === 'loading') {
         return (
@@ -78,6 +96,35 @@ function OrderConfirmationContent() {
                 </Card>
             </div>
         )
+    }
+
+    if (status === 'pending') {
+        return (
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 flex justify-center items-center">
+                <Card className="w-full max-w-lg text-center">
+                    <CardHeader>
+                    <div className="mx-auto bg-yellow-100 rounded-full h-16 w-16 flex items-center justify-center mb-4">
+                        <Clock className="h-10 w-10 text-yellow-600" />
+                    </div>
+                    <CardTitle className="text-3xl font-bold font-bangla">অর্ডার বিচারাধীন!</CardTitle>
+                    <CardDescription className="text-lg text-muted-foreground font-bangla">
+                        ধন্যবাদ, {orderDetails?.customer?.full_name}! আপনার অর্ডারটি আমরা পেয়েছি।
+                    </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                    <p className="font-bangla text-lg">
+                        আপনার পেমেন্ট যাচাই করার পর আমরা আপনার অর্ডারটি সম্পন্ন করব।
+                    </p>
+                    <p className="font-bangla text-2xl font-bold">
+                        সর্বমোট মূল্য: ৳{orderDetails?.amount}
+                    </p>
+                    <p className="font-bangla text-muted-foreground">
+                        আমাদের একজন প্রতিনিধি শীঘ্রই আপনার সাথে যোগাযোগ করবে।
+                    </p>
+                    </CardContent>
+                </Card>
+            </div>
+        );
     }
 
 

@@ -21,12 +21,22 @@ const OrderDetailsSchema = z.object({
 
 type OrderDetails = z.infer<typeof OrderDetailsSchema>;
 
+const ManualOrderDetailsSchema = OrderDetailsSchema.extend({
+  paymentMethod: z.string(),
+  transactionId: z.string(),
+});
+type ManualOrderDetails = z.infer<typeof ManualOrderDetailsSchema>;
+
+
 const OrderSchema = z.object({
   orderNumber: z.string(),
   name: z.string(),
   phone: z.string(),
   date: z.string(),
-  status: z.string(),
+  status: z.string(), // 'Completed', 'Pending'
+  paymentMethod: z.string().optional(),
+  transactionId: z.string().optional(),
+  totalPrice: z.string().optional(),
 });
 export type Order = z.infer<typeof OrderSchema>;
 
@@ -83,6 +93,7 @@ async function appendToLocalFile(details: OrderDetails) {
       phone: details.phone,
       date: new Date().toISOString(),
       status: 'Completed',
+      totalPrice: details.totalPrice,
     };
     orders.push(newOrder);
     await saveOrdersToFile(orders);
@@ -108,6 +119,28 @@ export async function processOrder(details: OrderDetails) {
   ]);
 }
 
+export async function createManualOrder(details: ManualOrderDetails) {
+  const validation = ManualOrderDetailsSchema.safeParse(details);
+  if (!validation.success) {
+    throw new Error('Invalid manual order details');
+  }
+  const validatedDetails = validation.data;
+  const orders = await getOrdersFromFile();
+  const newOrder: Order = {
+      orderNumber: validatedDetails.orderNumber,
+      name: validatedDetails.name,
+      phone: validatedDetails.phone,
+      date: new Date().toISOString(),
+      status: 'Pending',
+      paymentMethod: validatedDetails.paymentMethod,
+      transactionId: validatedDetails.transactionId,
+      totalPrice: validatedDetails.totalPrice,
+  };
+  orders.push(newOrder);
+  await saveOrdersToFile(orders);
+  return { success: true, order: newOrder };
+}
+
 export async function getOrders(): Promise<{orders: Order[], error?: string}> {
   try {
     const orders = await getOrdersFromFile();
@@ -116,4 +149,22 @@ export async function getOrders(): Promise<{orders: Order[], error?: string}> {
     console.error('Error fetching from local file:', error);
     return { orders: [], error: 'Failed to fetch orders.' };
   }
+}
+
+export async function updateOrderStatus(orderNumber: string, status: 'Completed' | 'Pending'): Promise<{success: boolean, error?: string}> {
+    try {
+        const orders = await getOrdersFromFile();
+        const orderIndex = orders.findIndex(o => o.orderNumber === orderNumber);
+
+        if (orderIndex === -1) {
+            return { success: false, error: 'Order not found' };
+        }
+
+        orders[orderIndex].status = status;
+        await saveOrdersToFile(orders);
+        return { success: true };
+    } catch (error) {
+        console.error('Error updating order status:', error);
+        return { success: false, error: 'Failed to update order status.' };
+    }
 }
