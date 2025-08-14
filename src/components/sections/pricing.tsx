@@ -21,14 +21,12 @@ import Link from 'next/link';
 
 const parsePrice = (priceString: string | number): number => {
   if (typeof priceString === 'number') return priceString;
-  // This regex will remove currency symbols and commas, but keeps the digits.
   const price = parseInt(String(priceString).replace(/[^\d]/g, ''), 10);
   return isNaN(price) ? 0 : price;
 };
 
-
 const formatPrice = (price: number): string => {
-    return `৳${price.toLocaleString('en-IN')}`;
+  return `৳${price.toLocaleString('en-IN')}`;
 };
 
 const hardwareAddons = [
@@ -50,7 +48,8 @@ const pricingPlans = {
   monthly: [
     {
       name: 'স্ট্যান্ডার্ড',
-      price: 1500,
+      originalPrice: 1500,
+      price: 750,
       period: '/মাস',
       description: 'একক-শাখা ফার্মেসির জন্য উপযুক্ত।',
       features: [
@@ -67,7 +66,8 @@ const pricingPlans = {
     },
     {
       name: 'প্রফেশনাল',
-      price: 2500,
+      originalPrice: 2500,
+      price: 1250,
       period: '/মাস',
       description: 'একাধিক-শাখা পরিচালনা এবং ক্রমবর্ধমান ব্যবসার জন্য আদর্শ।',
       features: [
@@ -82,7 +82,8 @@ const pricingPlans = {
   yearly: [
     {
       name: 'স্ট্যান্ডার্ড',
-      price: 15000,
+      originalPrice: 15000,
+      price: 7500,
       period: '/বছর',
       description: 'একক-শাখা ফার্মেসির জন্য উপযুক্ত।',
       features: [
@@ -99,7 +100,8 @@ const pricingPlans = {
     },
     {
       name: 'প্রফেশনাল',
-      price: 25000,
+      originalPrice: 25000,
+      price: 12500,
       period: '/বছর',
       description: 'একাধিক-শাখা পরিচালনা এবং ক্রমবর্ধমান ব্যবসার জন্য আদর্শ।',
       features: [
@@ -158,6 +160,9 @@ const PricingCard = ({ plan }: { plan: any }) => {
         <div className="flex items-baseline gap-2 mt-4">
           <span className="text-4xl font-extrabold tracking-tight">
             {formatPrice(plan.price)}
+          </span>
+          <span className="text-xl font-medium text-muted-foreground line-through">
+            {formatPrice(plan.originalPrice)}
           </span>
           <span className="text-sm font-medium text-muted-foreground font-bangla">
             {plan.period}
